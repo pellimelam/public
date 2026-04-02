@@ -267,18 +267,18 @@ const slug = `${data.firstName}${data.lastName}${data.phone}`.toLowerCase();
 const canonicalUrl = `https://registry.vidhwaan.com/${slug}`;
 
 /* TITLE */
-document.title = `Vidhwaan | ${data.firstName} ${data.lastName} | ${data.instrument}`;
+document.title = `Vidhwaan | ${data.firstName} ${data.lastName} | ${data.profession}`;
 
 /* DESCRIPTION */
 const meta = document.createElement("meta");
 meta.name = "description";
-meta.content = `${data.firstName} ${data.lastName} is a professional ${data.instrument} artist in ${geo}. Book now via Vidhwaan.`;
+meta.content = `${data.firstName} ${data.lastName} is a ${data.profession} based in ${geo}. Connect via Vidhwaan.`;
 document.head.appendChild(meta);
 
 /* KEYWORDS */
 const keywords = document.createElement("meta");
 keywords.name = "keywords";
-keywords.content = `${data.instrument}, ${data.firstName}, ${geo}, vidhwaan`;
+keywords.content = `${data.profession}, ${data.firstName}, ${geo}, vidhwaan`;
 document.head.appendChild(keywords);
 
 /* ✅ CANONICAL (VERY IMPORTANT) */
@@ -317,7 +317,7 @@ script.innerHTML = JSON.stringify({
 "@type":"Person",
 "name":`${data.firstName} ${data.lastName}`,
 "url": canonicalUrl,
-"jobTitle": data.instrument,
+"jobTitle": data.profession,
 "address":{
 "@type":"PostalAddress",
 "addressLocality": data.location.village,
@@ -408,7 +408,7 @@ box-shadow:0 0 40px rgba(59,130,246,0.6);
 
 <h1>${data.firstName} ${data.lastName}</h1>
 
-<div class="badge">${data.instrument}</div>
+<div class="badge">${data.profession}</div>
 
 <!-- ❌ REMOVED SLUG ADDRESS -->
 
@@ -666,7 +666,7 @@ data.phone
 
 
 
-function downloadQR(name, instrument, url, phone){
+function downloadQR(name, profession, url, phone){
 
 const scale = 2;
 
@@ -706,7 +706,7 @@ ctx.fillText(name, W/2, 155);
 // ================= ROLE =================
 ctx.fillStyle = "#2563eb";
 ctx.font = "20px Inter";
-ctx.fillText(instrument, W/2, 195);
+ctx.fillText(profession, W/2, 195);
 
 // ================= LAYOUT =================
 const topEnd = 220;
@@ -940,28 +940,31 @@ const content = `
 
 <div class="card">
 
-<p style="line-height:1.6;color:#cbd5f5;">
+<p style="line-height:1.7;color:#cbd5f5;">
 
-Hello, I am <b>${data.firstName} ${data.lastName}</b>, a dedicated and professional 
-<b>${data.instrument}</b> artist based in 
+Hello, I am <b>${data.firstName} ${data.lastName}</b>.
+
+I am currently living in 
 <b>
 ${getVillageName(data.location.village)},
 ${formatName(data.location.subdistrict)},
 ${formatName(data.location.district)},
 ${formatName(data.location.state)}
-</b>
+</b>.
 
 </p>
 
-<p style="line-height:1.6;color:#cbd5f5;">
+<p style="line-height:1.7;color:#cbd5f5;">
 
-I specialize in performing at weddings, cultural events, traditional ceremonies, and special occasions, bringing authentic musical experience to every event.
+I am working as a <b>${data.profession}</b>.
+
+I am passionate about my work and continuously striving to grow, improve, and create a better future through my profession.
 
 </p>
 
-<p style="line-height:1.6;color:#cbd5f5;">
+<p style="line-height:1.7;color:#cbd5f5;">
 
-With passion and experience in my field, I aim to deliver high-quality performances that create memorable moments for every audience.
+Through Vidhwaan, I aim to connect, share, and build meaningful opportunities in my field and community.
 
 </p>
 
@@ -970,13 +973,13 @@ With passion and experience in my field, I aim to deliver high-quality performan
 
 <div class="card">
 
-<h3>Services</h3>
+<h3>Professional Highlights</h3>
 
 <ul style="color:#cbd5f5;line-height:1.8;padding-left:18px;">
-<li>Wedding Performances</li>
-<li>Cultural Events</li>
-<li>Temple Programs</li>
-<li>Private Functions</li>
+<li>Professional Work & Experience</li>
+<li>Community Engagement</li>
+<li>Skill Development</li>
+<li>Open to Opportunities</li>
 </ul>
 
 </div>
