@@ -31,12 +31,54 @@ Register as Vidhwaan
 <div class="field"><input id="phone" placeholder="Mobile Number"></div>
 
 <div class="field">
-<select id="instrument">
-<option value="">Select Instrument</option>
-<option>Nadaswaram</option>
-<option>Dolu</option>
-<option>Saxophone</option>
-<option>Drum</option>
+<select id="profession">
+<option value="">Select Profession</option>
+
+<!-- General -->
+<option>Student</option>
+<option>Job Seeker</option>
+<option>Self Employed</option>
+<option>Freelancer</option>
+
+<!-- Business -->
+<option>Business Owner</option>
+<option>Shop Owner</option>
+<option>Startup Founder</option>
+
+<!-- Agriculture -->
+<option>Farmer</option>
+<option>Dairy Farmer</option>
+
+<!-- Skilled Workers -->
+<option>Electrician</option>
+<option>Plumber</option>
+<option>Carpenter</option>
+<option>Mechanic</option>
+<option>Driver</option>
+
+<!-- Professionals -->
+<option>Teacher</option>
+<option>Doctor</option>
+<option>Engineer</option>
+<option>Lawyer</option>
+<option>Accountant</option>
+
+<!-- Creative -->
+<option>Artist</option>
+<option>Musician</option>
+<option>Photographer</option>
+<option>Video Creator</option>
+
+<!-- Tech -->
+<option>Software Developer</option>
+<option>Designer</option>
+<option>Digital Marketer</option>
+
+<!-- Others -->
+<option>Housewife</option>
+<option>Retired</option>
+<option>Other</option>
+
 </select>
 </div>
 
