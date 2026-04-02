@@ -3,7 +3,7 @@ import { generateGallery } from "./template/gallery.js";
 import { generateVideos } from "./template/videos.js";
 import { generateAbout } from "./template/about.js";
 
-const API = "https://cold-haze-63a2.needfullfil.workers.dev/";
+const API = "https://snowy-fire-89a1.needfullfil.workers.dev/";
 
 /* =========================
    CHECK REPO
