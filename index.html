@@ -80,7 +80,7 @@ const village = document.getElementById("village").value;
 const firstName = document.getElementById("firstName").value.trim();
 const lastName = document.getElementById("lastName").value.trim();
 const phone = document.getElementById("phone").value.trim();
-const instrument = document.getElementById("instrument").value;
+const profession = document.getElementById("profession").value;
 
 /* VALIDATION */
 
@@ -89,7 +89,7 @@ alert("Please select complete location");
 return;
 }
 
-if(!firstName || !lastName || !phone || !instrument){
+if(!firstName || !lastName || !phone || !profession){
 alert("Please fill all details");
 return;
 }
@@ -141,7 +141,7 @@ const data = {
   firstName,
   lastName,
   phone,
-  instrument,
+  profession,
   location:{
     state,
     district,
@@ -171,7 +171,7 @@ ${slugify(state)}/
 ${slugify(district)}/
 ${slugify(subdistrict)}/
 ${slugify(village)}/
-${slugify(instrument)}/
+${slugify(profession)}/
 ${slug}
 `.replace(/\n/g,"");
 
