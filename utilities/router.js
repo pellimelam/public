@@ -264,7 +264,7 @@ document.querySelectorAll("meta[property^='og:']").forEach(e=>e.remove());
 const geo = `${data.location.village}, ${data.location.subdistrict}, ${data.location.district}, ${data.location.state}`;
 
 const slug = `${data.firstName}${data.lastName}${data.phone}`.toLowerCase();
-const canonicalUrl = `https://registry.vidhwaan.com/${slug}`;
+const canonicalUrl = `https://app.vidhwaan.com/${slug}`;
 
 /* TITLE */
 document.title = `Vidhwaan | ${data.firstName} ${data.lastName} | ${data.profession}`;
