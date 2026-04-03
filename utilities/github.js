@@ -77,7 +77,8 @@ const fullData = {
 ...data,
 gallery:[],
 videos:[],
-about:""
+about:"",
+social: []
 };
 
 /* SAVE DATA */
