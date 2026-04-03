@@ -118,10 +118,12 @@ return;
 }
 
 /* =========================
-   🔥 ADD RAZORPAY HERE
+   🔒 STRICT PAYMENT CONTROL
 ========================= */
 
 resultEl.innerHTML = "Opening payment...";
+
+let paymentDone = false;
 
 const rzp = new Razorpay({
   key: "rzp_live_SO4F7YCOOnRVRZ",
@@ -132,20 +134,21 @@ const rzp = new Razorpay({
 
   handler: async function(response){
 
-    if(!response.razorpay_payment_id){
-      alert("Payment failed");
+    // 🔒 ENSURE THIS RUNS ONLY ON REAL PAYMENT
+    if(paymentDone) return;
 
+    if(!response || !response.razorpay_payment_id){
       resultEl.innerHTML = `
       <div style="color:#ef4444;margin-top:10px;">
-      ❌ Payment failed. Please try again.
-      </div>
-      `;
-
+      ❌ Payment verification failed. Please try again.
+      </div>`;
       return;
     }
 
+    paymentDone = true;
+
     /* =========================
-       ORIGINAL CREATE FLOW
+       ORIGINAL CREATE FLOW (UNCHANGED)
     ========================= */
 
     resultEl.innerHTML = "Creating profile...";
@@ -248,9 +251,8 @@ const rzp = new Razorpay({
 
   modal:{
     ondismiss: function(){
-      alert("Payment cancelled. Registration failed.");
-    
-      // ✅ RESET UI
+      paymentDone = false;
+
       resultEl.innerHTML = `
       <div style="color:#94a3b8;margin-top:10px;">
       Payment cancelled. Please try again.
@@ -261,7 +263,6 @@ const rzp = new Razorpay({
 });
 
 rzp.open();
-
 }
 </script>
 
