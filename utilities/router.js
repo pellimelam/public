@@ -290,7 +290,7 @@ document.head.appendChild(link);
 /* ✅ OPEN GRAPH (SOCIAL + GOOGLE BOOST) */
 const ogTitle = document.createElement("meta");
 ogTitle.setAttribute("property","og:title");
-ogTitle.content = `${data.firstName} ${data.lastName} | ${data.instrument}`;
+ogTitle.content = `${data.firstName} ${data.lastName} | ${data.profession}`;
 document.head.appendChild(ogTitle);
 
 const ogDesc = document.createElement("meta");
@@ -359,7 +359,7 @@ function renderHome(data){
 
 applySEO(
 `${data.firstName} ${data.lastName}`,
-`${data.instrument} artist`,
+`${data.profession}`,
 data
 );
 
@@ -472,7 +472,7 @@ margin-top:10px;
 
 <button id="downloadQRBtn"
 data-name="${data.firstName} ${data.lastName}"
-data-instrument="${data.instrument}"
+data-profession="${data.profession}"
 data-url="${profileUrl}"
 style="
 background:#1e40af;
@@ -652,7 +652,7 @@ if(btn){
 btn.onclick = function(){
 downloadQR(
 this.dataset.name,
-this.dataset.instrument,
+this.dataset.profession,
 this.dataset.url,
 data.phone
 );
@@ -1084,5 +1084,4 @@ initRouter();
 });
 
 }
-
 
