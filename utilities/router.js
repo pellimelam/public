@@ -91,7 +91,7 @@ if(mem && cached && mem.version === cached.version){
   renderPage(mem, page);
 
   // 🔥 SAFE BACKGROUND VERIFY
-  fetch(`https://raw.githubusercontent.com/vidhwaan/${phone}/main/data.json`)
+  fetch(`https://raw.githubusercontent.com/Vidhwaan1/${phone}/main/data.json`)
     .then(r => {
       if(!r.ok) throw new Error("fetch failed");
       return r.json();
