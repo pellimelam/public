@@ -1005,6 +1005,45 @@ India - ${extractPincode(data.location.village)}
 
 </div>
 
+
+<div class="card">
+
+<h3>Social Media</h3>
+
+<div style="display:flex;gap:10px;flex-wrap:wrap;">
+
+${
+  (data.social && data.social.length)
+    ? data.social.map(s => {
+        let color = "#1e40af";
+
+        if(s.name.toLowerCase().includes("youtube")) color = "#ef4444";
+        else if(s.name.toLowerCase().includes("instagram")) color = "#e1306c";
+        else if(s.name.toLowerCase().includes("facebook")) color = "#1877f2";
+        else if(s.name.toLowerCase().includes("twitter")) color = "#1da1f2";
+        else if(s.name.toLowerCase().includes("whatsapp")) color = "#22c55e";
+        else if(s.name.toLowerCase().includes("linkedin")) color = "#0a66c2";
+
+        return `
+        <a href="${s.url}" target="_blank"
+        style="
+          background:${color};
+          padding:10px 14px;
+          border-radius:8px;
+          color:white;
+          text-decoration:none;
+        ">
+          ${s.name}
+        </a>
+        `;
+      }).join("")
+    : `<span style="color:#94a3b8;">No social links added</span>`
+}
+
+</div>
+
+</div>
+
 `;
 
 renderLayout(layout(data, content));
