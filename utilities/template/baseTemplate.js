@@ -13,7 +13,7 @@ return `
 <title>Loading...</title>
 
 <!-- ✅ FAVICON -->
-<link rel="icon" href="https://registry.vidhwaan.com/favicon.ico">
+<link rel="icon" href="https://app.vidhwaan.com/favicon.ico">
 
 </head>
 <body>
@@ -281,7 +281,7 @@ box-shadow:0 8px 20px rgba(0,0,0,0.3);
 
 <div class="logo" style="display:flex;align-items:center;gap:10px;">
 
-<img src="https://registry.vidhwaan.com/icons1/logo.png"
+<img src="https://app.vidhwaan.com/icons1/logo.png"
 style="height:32px;width:auto;display:block;max-width:none;">
 
 <span style="font-weight:700;font-size:18px;color:white;">
