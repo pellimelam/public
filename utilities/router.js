@@ -522,16 +522,6 @@ style="background:#0ea5e9;padding:10px 14px;border-radius:8px;color:white;text-d
 Vidhwaan Apps
 </a>
 
-<a href="https://ai.vidhwaan.com" target="_blank"
-style="background:#0ea5e9;padding:10px 14px;border-radius:8px;color:white;text-decoration:none;">
-Vidhwaan AI
-</a>
-
-<a href="https://foundation.vidhwaan.com" target="_blank"
-style="background:#9333ea;padding:10px 14px;border-radius:8px;color:white;text-decoration:none;">
-Vidhwaan Foundation
-</a>
-
 <a href="https://pellimelam.vidhwaan.com" target="_blank"
 style="background:#f59e0b;padding:10px 14px;border-radius:8px;color:white;text-decoration:none;">
 Vidhwaan PelliMelam
@@ -540,6 +530,11 @@ Vidhwaan PelliMelam
 <a href="https://booking.vidhwaan.com" target="_blank"
 style="background:#f59e0b;padding:10px 14px;border-radius:8px;color:white;text-decoration:none;">
 Book PelliMelam
+</a>
+
+<a href="https://foundation.vidhwaan.com" target="_blank"
+style="background:#9333ea;padding:10px 14px;border-radius:8px;color:white;text-decoration:none;">
+Vidhwaan Foundation
 </a>
 
 </div>
