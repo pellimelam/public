@@ -123,7 +123,7 @@ if(mem && cached && mem.version === cached.version){
 ========================= */
 
 const rawRes = await fetch(
-  `https://raw.githubusercontent.com/vidhwaan/${phone}/main/data.json`
+  `https://raw.githubusercontent.com/Vidhwaan1/${phone}/main/data.json`
 );
 
 if(!rawRes.ok){
@@ -164,7 +164,7 @@ if(!window.__BG_REFRESH[phone]){
   window.__BG_REFRESH[phone] = true;
 
   setTimeout(()=>{
-    fetch(`https://raw.githubusercontent.com/vidhwaan/${phone}/main/data.json`)
+    fetch(`https://raw.githubusercontent.com/Vidhwaan1/${phone}/main/data.json`)
       .then(r => {
         if(!r.ok) throw new Error("fetch failed");
         return r.json();
@@ -233,7 +233,7 @@ ${slugify(data.location.state)}/
 ${slugify(data.location.district)}/
 ${slugify(data.location.subdistrict)}/
 ${slugify(data.location.village)}/
-${slugify(data.instrument)}/
+${slugify(data.profession)}/
 ${slug}
 `.replace(/\n/g,"");
 
@@ -1084,4 +1084,3 @@ initRouter();
 });
 
 }
-
