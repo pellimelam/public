@@ -134,6 +134,13 @@ const rzp = new Razorpay({
 
     if(!response.razorpay_payment_id){
       alert("Payment failed");
+
+      resultEl.innerHTML = `
+      <div style="color:#ef4444;margin-top:10px;">
+      ❌ Payment failed. Please try again.
+      </div>
+      `;
+
       return;
     }
 
@@ -242,6 +249,13 @@ const rzp = new Razorpay({
   modal:{
     ondismiss: function(){
       alert("Payment cancelled. Registration failed.");
+    
+      // ✅ RESET UI
+      resultEl.innerHTML = `
+      <div style="color:#94a3b8;margin-top:10px;">
+      Payment cancelled. Please try again.
+      </div>
+      `;
     }
   }
 });
