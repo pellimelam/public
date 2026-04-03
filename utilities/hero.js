@@ -6,7 +6,7 @@ const hero = `
 
 <img src="./icons1/logo.png" class="logo" alt="Vidhwaan Logo">
 
-<h1>Vidhwaan Community</h1>
+<h1>Vidhwaan Apps</h1>
 
 <p>Official Vidhwaan Registration Platform</p>
 
@@ -16,8 +16,8 @@ const hero = `
 Start Registration
 </a>
 
-<a class="btn btn-outline" href="https://pellimelam.vidhwaan.com">
-Explore PelliMelam
+<a class="btn btn-outline" href="https://vidhwaan.com">
+Explore Vidhwaan
 </a>
 
 </div>
