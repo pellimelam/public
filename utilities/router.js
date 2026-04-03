@@ -1037,7 +1037,7 @@ ${
         </a>
         `;
       }).join("")
-    : `<span style="color:#94a3b8;">No social links added</span>`
+    : `<span style="color:#94a3b8;">No social links added-contact support to add</span>`
 }
 
 </div>
