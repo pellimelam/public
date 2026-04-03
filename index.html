@@ -106,7 +106,52 @@ return;
 
 const resultEl = document.getElementById("result");
 
-resultEl.innerHTML = "Checking...";
+resultEl.innerHTML = "Opening payment...";
+
+/* =========================
+   RAZORPAY
+========================= */
+
+const options = {
+  key: "rzp_live_SO4F7YCOOnRVRZ",
+  amount: 100,
+  currency: "INR",
+  name: "Vidhwaan",
+  description: "Profile Registration",
+
+  handler: async function (response) {
+
+    if(!response.razorpay_payment_id){
+      alert("Payment failed");
+      return;
+    }
+
+    resultEl.innerHTML = "Payment successful. Creating profile...";
+
+    proceedRegistration();
+  },
+
+  modal: {
+    ondismiss: function(){
+      alert("Payment cancelled. Registration failed.");
+    }
+  },
+
+  theme: {
+    color: "#2563eb"
+  }
+};
+
+const rzp = new Razorpay(options);
+rzp.open();
+
+return;
+
+/* =========================
+   PROCEED AFTER PAYMENT
+========================= */
+
+async function proceedRegistration(){
 
 const exists = await checkRepo(phone);
 
@@ -138,7 +183,7 @@ return;
 /* DATA OBJECT */
 
 const data = {
-  version: 1,   // ✅ ADD THIS
+  version: 1,
   firstName,
   lastName,
   phone,
@@ -163,6 +208,7 @@ village
 /* FINAL URL */
 
 const slug = `${firstName}${lastName}${phone}`.toLowerCase();
+
 function slugify(str){
 return str.toLowerCase().replace(/\s+/g,"-");
 }
@@ -178,7 +224,9 @@ ${slug}
 
 const url = `https://app.vidhwaan.com/${slug}`;
 
-document.getElementById("result").innerHTML = `
+/* SUCCESS UI */
+
+resultEl.innerHTML = `
 <div style="
 padding:16px;
 border-radius:10px;
@@ -250,7 +298,7 @@ card.style.setProperty("--y", y + "px");
 
 </script>
 
-
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   
 </body>
 </html>
