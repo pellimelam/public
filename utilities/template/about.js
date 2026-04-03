@@ -24,7 +24,7 @@ const content = `
 <p style="line-height:1.6;color:#cbd5f5;">
 
 Hello, I am <b>${data.firstName} ${data.lastName}</b>, a dedicated and professional 
-<b>${data.instrument}</b> artist based in 
+<b>${data.profession}</b> artist based in 
 <b>
 ${getVillageName(data.location.village)},
 ${formatName(data.location.subdistrict)},
