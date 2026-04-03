@@ -38,7 +38,7 @@ box-shadow:0 0 40px rgba(59,130,246,0.6);
 
 <h1>${data.firstName} ${data.lastName}</h1>
 
-<div class="badge">${data.instrument}</div>
+<div class="badge">${data.profession}</div>
 
 </div>
 
