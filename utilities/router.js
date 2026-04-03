@@ -783,12 +783,12 @@ ctx.fillText(`VID-${phone}`, W/2, footerY);
 // COMMUNITY (primary footer identity)
 ctx.fillStyle = "#111827";
 ctx.font = "bold 22px Inter";
-ctx.fillText("Vidhwaan Community", W/2, footerY + 40);
+ctx.fillText("Vidhwaan Group", W/2, footerY + 40);
 
 // TAGLINE
 ctx.fillStyle = "#4b5563";
 ctx.font = "15px Inter";
-ctx.fillText("Tradition • Pride • Legacy", W/2, footerY + 70);
+ctx.fillText("Culture • Technology • Impact", W/2, footerY + 70);
 
 // DIVIDER (refined)
 ctx.fillStyle = "#1f2937";
