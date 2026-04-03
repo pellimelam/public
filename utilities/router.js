@@ -976,10 +976,16 @@ Through Vidhwaan, I aim to connect, share, and build meaningful opportunities in
 <h3>Professional Highlights</h3>
 
 <ul style="color:#cbd5f5;line-height:1.8;padding-left:18px;">
-<li>Professional Work & Experience</li>
-<li>Community Engagement</li>
-<li>Skill Development</li>
-<li>Open to Opportunities</li>
+${
+  data.about
+    ? data.about.split("\n").map(line => `<li>${line}</li>`).join("")
+    : `
+      <li>Professional Work & Experience</li>
+      <li>Community Engagement</li>
+      <li>Skill Development</li>
+      <li>Open to Opportunities</li>
+    `
+}
 </ul>
 
 </div>
