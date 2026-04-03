@@ -68,16 +68,9 @@ initRouter();
 <script type="module">
 
 import { initRouter } from "./utilities/router.js"
-
 import { checkRepo, createRepo, createUserSite } from "./utilities/github.js";
 
-document.addEventListener("click", async (e) => {
-
-if(e.target.id !== "registerBtn") return;
-
-/* =========================
-   GET DATA
-========================= */
+window.registerUser = async function(){
 
 const state = document.getElementById("state").value;
 const district = document.getElementById("district").value;
@@ -88,8 +81,6 @@ const firstName = document.getElementById("firstName").value.trim();
 const lastName = document.getElementById("lastName").value.trim();
 const phone = document.getElementById("phone").value.trim();
 const profession = document.getElementById("profession").value;
-
-const resultEl = document.getElementById("result");
 
 /* VALIDATION */
 
@@ -108,47 +99,59 @@ alert("Enter valid mobile number");
 return;
 }
 
+/* CHECK */
+
+const resultEl = document.getElementById("result");
+
+resultEl.innerHTML = "Checking...";
+
+const exists = await checkRepo(phone);
+
+if(exists){
+resultEl.innerHTML = `
+<div style="color:#ef4444;margin-top:10px;">
+❌ Profile already exists with this phone number.<br>
+Contact via WhatsApp (bottom right).
+</div>
+`;
+return;
+}
+
 /* =========================
-   PAYMENT
+   🔥 ADD RAZORPAY HERE
 ========================= */
 
 resultEl.innerHTML = "Opening payment...";
 
 const rzp = new Razorpay({
   key: "rzp_live_SO4F7YCOOnRVRZ",
-  amount: 1,
+  amount: 100,
   currency: "INR",
   name: "Vidhwaan",
   description: "Profile Registration",
 
-  handler: async (response) => {
+  handler: async function(response){
 
     if(!response.razorpay_payment_id){
       alert("Payment failed");
       return;
     }
 
-    resultEl.innerHTML = "Creating profile...";
-
     /* =========================
-       ORIGINAL FLOW
+       ORIGINAL CREATE FLOW
     ========================= */
 
-    const exists = await checkRepo(phone);
-
-    if(exists){
-      resultEl.innerHTML = `
-      <div style="color:#ef4444;">
-      ❌ Profile already exists
-      </div>`;
-      return;
-    }
+    resultEl.innerHTML = "Creating profile...";
 
     const status = await createRepo(phone);
 
     if(status !== "created"){
-      resultEl.innerHTML = "❌ Error creating profile";
-      return;
+    resultEl.innerHTML = `
+    <div style="color:#ef4444;margin-top:10px;">
+    ❌ Error creating profile. Please try again.
+    </div>
+    `;
+    return;
     }
 
     const data = {
@@ -164,34 +167,89 @@ const rzp = new Razorpay({
         village
       },
       gallery: [],
-      videos: []
+      videos: [],
     };
 
-    await createUserSite({...data, village});
+    await createUserSite({
+    ...data,
+    village
+    });
 
     const slug = `${firstName}${lastName}${phone}`.toLowerCase();
+
+    function slugify(str){
+    return str.toLowerCase().replace(/\s+/g,"-");
+    }
+
+    const geoPath = `
+    ${slugify(state)}/
+    ${slugify(district)}/
+    ${slugify(subdistrict)}/
+    ${slugify(village)}/
+    ${slugify(profession)}/
+    ${slug}
+    `.replace(/\n/g,"");
+
     const url = `https://app.vidhwaan.com/${slug}`;
 
-    resultEl.innerHTML = `
-    <div style="color:#22c55e;">
-    ✅ Profile Created <br>
-    <a href="${url}" target="_blank">${url}</a>
-    </div>`;
+    document.getElementById("result").innerHTML = `
+    <div style="
+    padding:16px;
+    border-radius:10px;
+    margin-top:15px;
+    text-align:center;
+    background:rgba(255,255,255,0.03);
+    ">
+
+    <h3 style="margin-bottom:10px;color:#22c55e;">
+    ✅ Profile Created Successfully
+    </h3>
+
+    <p style="color:#94a3b8;font-size:14px;margin-bottom:10px;">
+    Save or open your profile link
+    </p>
+
+    <a href="${url}" target="_blank"
+    style="
+    display:block;
+    word-break:break-all;
+    color:#60a5fa;
+    text-decoration:none;
+    font-size:13px;
+    margin-bottom:12px;
+    ">
+    ${url}
+    </a>
+
+    <button onclick="navigator.clipboard.writeText('${url}')"
+    style="
+    background:#2563eb;
+    color:white;
+    padding:10px 14px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    ">
+    Copy URL
+    </button>
+
+    </div>
+    `;
+
+    alert("Profile created 🚀");
   },
 
-  modal: {
-    ondismiss: () => {
-      alert("Payment cancelled");
+  modal:{
+    ondismiss: function(){
+      alert("Payment cancelled. Registration failed.");
     }
   }
 });
 
 rzp.open();
 
-});
-
-
-</script> 
+}
+</script>
 
 
 <!-- OPTIONAL CARD HOVER EFFECT -->
