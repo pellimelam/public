@@ -441,7 +441,7 @@ if(!isStandalone && isInstalled){
    
 const content = `
 
-${sliderHTML}
+
 
 <div class="hero">
 
@@ -472,7 +472,7 @@ box-shadow:0 0 40px rgba(59,130,246,0.6);
 </div>
 
 
-
+${sliderHTML}
 
 
 
@@ -776,7 +776,7 @@ if(slider){
         index = (index + 1) % total;
         update();
       }
-    }, 4000);
+    }, 6000);
   }
 
   function stopAuto(){
