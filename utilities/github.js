@@ -78,7 +78,8 @@ const fullData = {
 gallery:[],
 videos:[],
 about:"",
-social: []
+social: [],
+slides: []
 };
 
 /* SAVE DATA */
