@@ -1149,4 +1149,35 @@ initRouter();
 };
 });
 
+/* =========================
+   GLOBAL SPA ROUTER (WORLD CLASS)
+========================= */
+
+if(!window.__SPA_ROUTER){
+
+  window.__SPA_ROUTER = true;
+
+  document.addEventListener("click", (e)=>{
+
+    const link = e.target.closest("a");
+
+    if(!link) return;
+
+    const href = link.getAttribute("href");
+
+    // ignore external links
+    if(!href || href.startsWith("http") || link.target === "_blank") return;
+
+    // ignore anchors
+    if(href.startsWith("#")) return;
+
+    e.preventDefault();
+
+    history.pushState({}, "", href);
+    initRouter();
+
+  });
+
+}
+
 }
