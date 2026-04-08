@@ -393,9 +393,13 @@ const sliderHTML = `
 
           ${
             s.img
-              ? `<a href="${s.link || '#'}" target="_blank">
-                  <img src="${s.img}" loading="lazy">
-                </a>`
+            ? (
+              s.link
+                ? `<a href="${s.link}" target="_blank" rel="noopener noreferrer">
+                     <img src="${s.img}" loading="lazy">
+                   </a>`
+                : `<img src="${s.img}" loading="lazy">`
+            )
               : `<div class="empty-slide">
                    Contact support to add images
                  </div>`
