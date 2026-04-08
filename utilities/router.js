@@ -359,17 +359,9 @@ function renderHome(data){
 
 
 
-/* ✅ ADD THIS BLOCK EXACTLY HERE */
-const slugify = str => str.toLowerCase().replace(/\s+/g,"-");
-
-const geoPath = `
-${slugify(data.location.state)}/
-${slugify(data.location.district)}/
-${slugify(data.location.subdistrict)}/
-${slugify(data.location.village)}/
-${slugify(data.profession)}/
-${(data.firstName + data.lastName + data.phone).toLowerCase()}
-`.replace(/\n/g,"");
+const slug = `${data.firstName}${data.lastName}${data.phone}`
+.toLowerCase()
+.replace(/\s+/g,"");
 
 applySEO(
 `${data.firstName} ${data.lastName}`,
@@ -512,17 +504,17 @@ My QR Card
 <div style="display:flex;gap:10px;flex-wrap:wrap;">
 
 
-<a href="/${geoPath}/gallery"
+<a href="/${slug}/gallery"
 style="background:#1e40af;padding:10px 14px;border-radius:8px;color:white;text-decoration:none;">
 Gallery
 </a>
 
-<a href="/${geoPath}/videos"
+<a href="/${slug}/videos"
 style="background:#0ea5e9;padding:10px 14px;border-radius:8px;color:white;text-decoration:none;">
 Videos
 </a>
 
-<a href="/${geoPath}/about"
+<a href="/${slug}/about"
 style="background:#0ea5e9;padding:10px 14px;border-radius:8px;color:white;text-decoration:none;">
 About
 </a>
