@@ -79,7 +79,14 @@ gallery:[],
 videos:[],
 about:"",
 social: [],
-slides: []
+slides: [],
+
+/* ✅ ADD THIS ONLY */
+business: {
+  slides: [],
+  categories: []
+}
+
 };
 
 /* SAVE DATA */
