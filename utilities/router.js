@@ -805,6 +805,41 @@ link.click();
 }
 
 
+
+
+
+
+/* =========================
+   BACK BUTTON (REUSABLE)
+========================= */
+
+function backButton(data){
+
+  const slug = `${data.firstName}${data.lastName}${data.phone}`
+    .toLowerCase()
+    .replace(/\s+/g,"");
+
+  return `
+  <div style="margin-bottom:15px;">
+    <a href="/${slug}"
+    style="
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      color:#60a5fa;
+      text-decoration:none;
+      font-weight:500;
+      font-size:14px;
+    ">
+      ← Back
+    </a>
+  </div>
+  `;
+}
+
+
+
+
 /* =========================
    GALLERY
 ========================= */
@@ -814,6 +849,8 @@ function renderGallery(data){
 const images = data.gallery || [];
 
 const content = `
+
+${backButton(data)}
 
 <h2>Gallery</h2>
 
@@ -890,6 +927,8 @@ const videos = data.videos || [];
 
 const content = `
 
+${backButton(data)}
+
 <h2>Videos</h2>
 
 <p style="color:#94a3b8;font-size:14px;margin-bottom:10px;">
@@ -948,6 +987,8 @@ initUI(data);
 function renderAbout(data){
 
 const content = `
+
+${backButton(data)}
 
 <h2>About</h2>
 
