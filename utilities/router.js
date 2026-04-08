@@ -706,29 +706,36 @@ link.href = `/manifest.json?name=${encodeURIComponent(data.firstName)}&start=${e
 
 
 
-/* =========================
-SLIDER LOGIC (FINAL)
-========================= */
+
+
 
 const slider = document.getElementById("slider");
 
 if(slider){
 
+  /* =========================
+     SINGLE INIT (CRITICAL)
+  ========================= */
+
+  if(slider.__INIT) return;
+  slider.__INIT = true;
+
   const slidesEl = slider.querySelector(".slides");
-  const total = slidesEl.children.length;
   const dotsEl = slider.querySelector(".dots");
+  const total = slidesEl.children.length;
 
   let index = 0;
   let startX = 0;
   let isTouching = false;
+  let interval = null;
 
   /* =========================
-     DOTS (CLEAN INIT)
+     DOTS
   ========================= */
 
   dotsEl.innerHTML = "";
 
-  for(let i=0;i<total;i++){
+  for(let i = 0; i < total; i++){
     const d = document.createElement("div");
 
     if(i === 0) d.classList.add("active");
@@ -744,27 +751,27 @@ if(slider){
   const dots = dotsEl.children;
 
   /* =========================
-     UPDATE FUNCTION
+     UPDATE
   ========================= */
 
   function update(){
     slidesEl.style.transform = `translateX(-${index * 100}%)`;
 
-    for(let i=0;i<dots.length;i++){
+    for(let i = 0; i < dots.length; i++){
       dots[i].classList.toggle("active", i === index);
     }
   }
 
   /* =========================
-     AUTO SLIDE (SAFE)
+     AUTO SLIDE (ONLY IF >1)
   ========================= */
 
-  if(window.__SLIDER_INTERVAL){
-    clearInterval(window.__SLIDER_INTERVAL);
-  }
-
   function startAuto(){
-    window.__SLIDER_INTERVAL = setInterval(()=>{
+    stopAuto();
+
+    if(total <= 1) return; // ✅ only skip auto, not entire slider
+
+    interval = setInterval(()=>{
       if(!isTouching){
         index = (index + 1) % total;
         update();
@@ -773,24 +780,29 @@ if(slider){
   }
 
   function stopAuto(){
-    if(window.__SLIDER_INTERVAL){
-      clearInterval(window.__SLIDER_INTERVAL);
+    if(interval){
+      clearInterval(interval);
+      interval = null;
     }
   }
 
   startAuto();
 
   /* =========================
-     SWIPE (MOBILE + DESKTOP)
+     TOUCH SWIPE
   ========================= */
 
   slider.addEventListener("touchstart", e=>{
+    if(total <= 1) return;
+
     isTouching = true;
     startX = e.touches[0].clientX;
     stopAuto();
   });
 
   slider.addEventListener("touchend", e=>{
+    if(total <= 1) return;
+
     const diff = e.changedTouches[0].clientX - startX;
 
     if(diff > 50) index = Math.max(0, index - 1);
@@ -802,10 +814,15 @@ if(slider){
     startAuto();
   });
 
-  /* DESKTOP DRAG */
+  /* =========================
+     DESKTOP DRAG
+  ========================= */
+
   let mouseDown = false;
 
   slider.addEventListener("mousedown", e=>{
+    if(total <= 1) return;
+
     mouseDown = true;
     isTouching = true;
     startX = e.clientX;
@@ -813,7 +830,7 @@ if(slider){
   });
 
   slider.addEventListener("mouseup", e=>{
-    if(!mouseDown) return;
+    if(!mouseDown || total <= 1) return;
 
     const diff = e.clientX - startX;
 
@@ -828,10 +845,25 @@ if(slider){
   });
 
   slider.addEventListener("mouseleave", ()=>{
+    if(total <= 1) return;
+
     mouseDown = false;
     isTouching = false;
     startAuto();
   });
+
+  /* =========================
+     CLEANUP (SPA SAFE)
+  ========================= */
+
+  const observer = new MutationObserver(()=>{
+    if(!document.body.contains(slider)){
+      stopAuto();
+      observer.disconnect();
+    }
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
 
 }
 
