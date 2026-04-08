@@ -63,6 +63,7 @@ let page = "home";
 if(path.includes("/gallery")) page = "gallery";
 else if(path.includes("/videos")) page = "videos";
 else if(path.includes("/about")) page = "about";
+else if(path.includes("/business")) page = "business";
 
 /* LOAD */
 loadProfilePage(phone, page);
@@ -209,6 +210,7 @@ function renderPage(data, page){
 if(page === "gallery") return renderGallery(data);
 if(page === "videos") return renderVideos(data);
 if(page === "about") return renderAbout(data);
+if(page === "business") return renderBusiness(data);
 
 renderHome(data);
 
@@ -573,6 +575,11 @@ Videos
 <a href="/${slug}/about"
 style="background:#0ea5e9;padding:10px 14px;border-radius:8px;color:white;text-decoration:none;">
 About
+</a>
+
+<a href="/${slug}/business"
+style="background:#22c55e;padding:10px 14px;border-radius:8px;color:white;text-decoration:none;">
+My Business
 </a>
 
 <a href="https://apps.vidhwaan.com" target="_blank"
@@ -1398,6 +1405,620 @@ initRouter();
 };
 });
 
+}
+
+
+
+
+function renderBusiness(data){
+
+
+
+/* =========================
+   SLIDER (REUSE)
+========================= */
+
+const slides = data.business?.slides || [];
+
+const finalSlides = slides.length
+  ? slides
+  : Array(5).fill({ img: "", link: "" });
+
+const sliderHTML = `
+<div class="card" style="padding:0;overflow:hidden;margin-bottom:15px;">
+
+  <div class="slider" id="slider">
+
+    <div class="slides">
+
+      ${finalSlides.map(s => `
+
+        <div class="slide">
+
+          ${
+            s.img
+            ? (
+              s.link
+                ? `<a href="${s.link}" target="_blank" rel="noopener noreferrer">
+                     <img src="${s.img}" loading="lazy">
+                   </a>`
+                : `<img src="${s.img}" loading="lazy">`
+            )
+            : `<div class="empty-slide">
+                 Contact support to add images
+               </div>`
+          }
+
+        </div>
+
+      `).join("")}
+
+    </div>
+
+    <div class="dots"></div>
+
+  </div>
+
+</div>
+`;
+
+
+const searchHTML = `
+<div class="card" style="padding:12px;margin-bottom:15px;">
+
+  <input
+    id="businessSearch"
+    placeholder="Search items..."
+    style="
+      width:100%;
+      height:42px;
+      border-radius:10px;
+      border:1px solid rgba(148,163,184,0.3);
+      background:#020617;
+      color:white;
+      padding:0 12px;
+      outline:none;
+      font-size:14px;
+    "
+  />
+
+</div>
+`;
+
+
+/* =========================
+   CATEGORIES
+========================= */
+
+const categories = data.business?.categories || [];
+
+const finalCategories = categories.length
+  ? categories
+  : Array(5).fill(0).map((_,i)=>({
+      name: `Category ${i+1}`,
+      img: ""
+    }));
+
+const categoryHTML = `
+<div class="card" style="padding:10px;margin-bottom:15px;">
+
+  <div style="
+    display:flex;
+    gap:12px;
+    overflow-x:auto;
+    padding-bottom:5px;
+  " id="categoryScroll">
+
+    ${finalCategories.map((c,i)=>`
+
+      <div class="category-item"
+        data-index="${i}"
+        style="
+          min-width:90px;
+          text-align:center;
+          cursor:pointer;
+        "
+      >
+
+        <div style="
+          width:70px;
+          height:70px;
+          border-radius:50%;
+          overflow:hidden;
+          margin:auto;
+          background:rgba(255,255,255,0.05);
+        ">
+
+          ${
+            c.img
+            ? `<img src="${c.img}" style="width:100%;height:100%;object-fit:cover;">`
+            : `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#64748b;font-size:11px;">No Image</div>`
+          }
+
+        </div>
+
+        <div style="
+          margin-top:6px;
+          font-size:12px;
+          color:#cbd5f5;
+        ">
+          ${c.name}
+        </div>
+
+      </div>
+
+    `).join("")}
+
+  </div>
+
+</div>
+`;
+
+
+/* =========================
+   ITEMS GRID
+========================= */
+
+const itemHTML = `
+<div id="itemsContainer"></div>
+`;
+
+
+
+
+const cartHTML = `
+<div id="cartBar" style="
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  background:#020617;
+  border-top:1px solid rgba(148,163,184,0.2);
+  padding:10px;
+  display:none;
+  z-index:999;
+">
+
+  <div style="
+    max-width:1200px;
+    margin:auto;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+  ">
+
+    <div>
+      <div id="cartTotal" style="font-weight:600;">₹0</div>
+      <div id="cartCount" style="font-size:12px;color:#94a3b8;">0 items</div>
+    </div>
+
+    <button id="cartProceed"
+      style="
+        background:#facc15;
+        color:black;
+        padding:10px 20px;
+        border-radius:999px;
+        border:none;
+        font-weight:600;
+        cursor:pointer;
+      ">
+      Proceed
+    </button>
+
+  </div>
+
+</div>
+
+`;
+
+const content = `
+
+${backButton(data)}
+
+<h2>My Business</h2>
+
+${sliderHTML}
+
+${searchHTML}
+
+${categoryHTML}
+${itemHTML}
+${cartHTML}
+
+`;
+
+
+   
+
+renderLayout(layout(data, content));
+
+requestAnimationFrame(()=>{
+initUI(data);
+});
+
+
+
+
+const searchInput = document.getElementById("businessSearch");
+
+if(searchInput){
+
+  searchInput.oninput = ()=>{
+
+    const q = searchInput.value.toLowerCase().trim();
+
+    const filtered = finalCats.map(cat=>{
+
+      const matchedItems = (cat.items || []).filter(item=>
+        item.name.toLowerCase().includes(q) ||
+        (item.weight || "").toLowerCase().includes(q) ||
+        cat.name.toLowerCase().includes(q)
+      );
+
+      return {
+        ...cat,
+        items: matchedItems
+      };
+
+    });
+
+    renderFilteredItems(filtered);
+
+  };
+
+}
+
+
+
+
+
+   
+/* =========================
+   CATEGORY SELECT
+========================= */
+
+const cats = document.querySelectorAll(".category-item");
+
+cats.forEach((el,i)=>{
+  el.onclick = ()=>{
+
+    /* REMOVE OLD ACTIVE */
+    cats.forEach(c=>{
+      c.style.opacity = "0.6";
+      c.classList.remove("active");   // ✅ ADD THIS
+    });
+
+    /* SET NEW ACTIVE */
+    el.style.opacity = "1";
+    el.classList.add("active");       // ✅ ADD THIS
+
+    window.__SELECTED_CATEGORY = i;
+
+    renderItems(i);
+  };
+});
+
+/* DEFAULT SELECT */
+if(cats.length){
+  cats[0].click();
+}
+
+
+
+/* =========================
+   ITEMS ENGINE
+========================= */
+
+const allCategories = data.business?.categories || [];
+
+function getFinalCategories(){
+  if(allCategories.length) return allCategories;
+
+  // placeholders
+  return Array(5).fill(0).map((_,ci)=>({
+    name:`Category ${ci+1}`,
+    img:"",
+    items: Array(5).fill(0).map((_,ii)=>({
+      name:`Item ${ii+1}`,
+      img:"",
+      price:1,
+      weight:"1 pc"
+    }))
+  }));
+}
+
+const finalCats = getFinalCategories();
+
+/* GLOBAL CART */
+window.__CART = window.__CART || {};
+
+function renderItems(catIndex){
+
+  const container = document.getElementById("itemsContainer");
+  if(!container) return;
+
+  const cat = finalCats[catIndex] || finalCats[0];
+  const items = cat.items || [];
+
+  container.innerHTML = `
+  <div class="grid">
+
+  ${items.map((item,i)=>{
+
+    const key = `${catIndex}_${i}`;
+    const qty = window.__CART[key]?.qty || 0;
+
+    return `
+
+    <div class="card" style="padding:10px;">
+
+      <div style="aspect-ratio:1/1;border-radius:10px;overflow:hidden;background:rgba(255,255,255,0.05);">
+
+        ${
+          item.img
+          ? `<img src="${item.img}" style="width:100%;height:100%;object-fit:cover;">`
+          : `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#64748b;">No Image</div>`
+        }
+
+      </div>
+
+      <div style="margin-top:8px;font-weight:600;font-size:14px;">
+        ${item.name}
+      </div>
+
+      <div style="font-size:12px;color:#94a3b8;">
+        ${item.weight || ""}
+      </div>
+
+      <div style="margin-top:5px;font-weight:600;">
+        ₹${item.price}
+      </div>
+
+      <div style="
+        margin-top:8px;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+        gap:8px;
+      ">
+
+        <button class="dec" data-key="${key}">−</button>
+
+        <div>${qty}</div>
+
+        <button class="inc" data-key="${key}">+</button>
+
+      </div>
+
+    </div>
+
+    `;
+  }).join("")}
+
+  </div>
+  `;
+
+  bindCartEvents();
+}
+
+
+/* =========================
+   CART BUTTON EVENTS
+========================= */
+
+function bindCartEvents(){
+
+  document.querySelectorAll(".inc").forEach(btn=>{
+    btn.onclick = ()=>{
+      const key = btn.dataset.key;
+
+      if(!window.__CART[key]){
+        window.__CART[key] = { qty:0 };
+      }
+
+      window.__CART[key].qty++;
+      renderItems(window.__SELECTED_CATEGORY || 0);
+      updateCartBar();
+    };
+  });
+
+  document.querySelectorAll(".dec").forEach(btn=>{
+    btn.onclick = ()=>{
+      const key = btn.dataset.key;
+
+      if(window.__CART[key]){
+        window.__CART[key].qty--;
+        if(window.__CART[key].qty <= 0){
+          delete window.__CART[key];
+        }
+      }
+
+      renderItems(window.__SELECTED_CATEGORY || 0);
+      updateCartBar();
+    };
+  });
+
+}
+
+
+
+
+/* =========================
+   CART UPDATE
+========================= */
+
+function updateCartBar(){
+
+  const bar = document.getElementById("cartBar");
+  const totalEl = document.getElementById("cartTotal");
+  const countEl = document.getElementById("cartCount");
+
+  let total = 0;
+  let count = 0;
+
+  Object.entries(window.__CART).forEach(([key,val])=>{
+    const [catIndex,itemIndex] = key.split("_").map(Number);
+
+    const item = finalCats[catIndex]?.items?.[itemIndex];
+    if(!item) return;
+
+    total += item.price * val.qty;
+    count += val.qty;
+  });
+
+  if(count === 0){
+    bar.style.display = "none";
+    return;
+  }
+
+  bar.style.display = "block";
+
+  totalEl.innerText = `₹${total}`;
+  countEl.innerText = `${count} items`;
+}
+
+
+
+
+/* =========================
+   WHATSAPP ORDER
+========================= */
+
+const proceedBtn = document.getElementById("cartProceed");
+
+if(proceedBtn){
+
+  proceedBtn.onclick = ()=>{
+
+    let message = `🛒 *New Order*\n\n`;
+
+    let total = 0;
+
+    Object.entries(window.__CART).forEach(([key,val])=>{
+
+      const [catIndex,itemIndex] = key.split("_").map(Number);
+      const item = finalCats[catIndex]?.items?.[itemIndex];
+
+      if(!item) return;
+
+      const price = item.price * val.qty;
+      total += price;
+
+      message += `• ${item.name} (${item.weight}) x ${val.qty} = ₹${price}\n`;
+    });
+
+    message += `\n*Total: ₹${total}*`;
+
+    const phone = data.phone; // registered number
+
+    const url = `https://wa.me/91${phone}?text=${encodeURIComponent(message)}`;
+
+    window.open(url, "_blank");
+
+  };
+
+}
+
+}
+
+
+
+function renderFilteredItems(filteredCats){
+
+  const container = document.getElementById("itemsContainer");
+  if(!container) return;
+
+  let html = "";
+
+  filteredCats.forEach((cat,catIndex)=>{
+
+    if(!cat.items || !cat.items.length) return;
+
+    html += `
+    <div style="margin-bottom:15px;">
+      <h3 style="margin:10px 0;">${cat.name}</h3>
+      <div class="grid">
+    `;
+
+    cat.items.forEach((item,i)=>{
+
+      const key = `${catIndex}_${i}`;
+      const qty = window.__CART[key]?.qty || 0;
+
+      html += `
+      <div class="card" style="padding:10px;">
+
+        <!-- IMAGE -->
+        <div style="
+          aspect-ratio:1/1;
+          border-radius:10px;
+          overflow:hidden;
+          background:rgba(255,255,255,0.05);
+        ">
+          ${
+            item.img
+            ? `<img src="${item.img}" style="width:100%;height:100%;object-fit:cover;">`
+            : `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#64748b;">No Image</div>`
+          }
+        </div>
+
+        <!-- NAME -->
+        <div style="margin-top:8px;font-weight:600;font-size:14px;">
+          ${item.name}
+        </div>
+
+        <!-- WEIGHT -->
+        <div style="font-size:12px;color:#94a3b8;">
+          ${item.weight || ""}
+        </div>
+
+        <!-- PRICE -->
+        <div style="margin-top:5px;font-weight:600;">
+          ₹${item.price}
+        </div>
+
+        <!-- QUANTITY -->
+        <div style="
+          margin-top:8px;
+          display:flex;
+          justify-content:center;
+          align-items:center;
+          gap:8px;
+        ">
+
+          <button class="dec" data-key="${key}">−</button>
+
+          <div>${qty}</div>
+
+          <button class="inc" data-key="${key}">+</button>
+
+        </div>
+
+      </div>
+      `;
+    });
+
+    html += `
+      </div>
+    </div>
+    `;
+
+  });
+
+  container.innerHTML = html;
+
+  /* 🔥 VERY IMPORTANT */
+  bindCartEvents();
+  updateCartBar();
+}
+
+
+
+
+
+
+   
 /* =========================
    GLOBAL SPA ROUTER (WORLD CLASS)
 ========================= */
