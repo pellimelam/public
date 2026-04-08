@@ -357,6 +357,20 @@ return str.split("-")[0].replace(/\b\w/g,c=>c.toUpperCase());
 
 function renderHome(data){
 
+
+
+/* ✅ ADD THIS BLOCK EXACTLY HERE */
+const slugify = str => str.toLowerCase().replace(/\s+/g,"-");
+
+const geoPath = `
+${slugify(data.location.state)}/
+${slugify(data.location.district)}/
+${slugify(data.location.subdistrict)}/
+${slugify(data.location.village)}/
+${slugify(data.profession)}/
+${(data.firstName + data.lastName + data.phone).toLowerCase()}
+`.replace(/\n/g,"");
+
 applySEO(
 `${data.firstName} ${data.lastName}`,
 `${data.profession}`,
