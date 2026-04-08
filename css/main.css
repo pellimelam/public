@@ -319,3 +319,82 @@ transparent 70%,
 rgba(0,0,0,0.2)
 );
 }
+
+/* =========================
+BUSINESS PAGE (FINAL)
+========================= */
+
+/* CATEGORY SCROLL */
+#categoryScroll{
+  scrollbar-width:none;
+}
+
+#categoryScroll::-webkit-scrollbar{
+  display:none;
+}
+
+.category-item{
+  opacity:0.6;
+  transition:0.25s;
+}
+
+.category-item:hover{
+  opacity:1;
+  transform:scale(1.05);
+}
+
+/* ACTIVE CATEGORY */
+.category-item.active{
+  opacity:1;
+}
+
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:12px;
+}
+
+/* ITEM CARD */
+.grid .card{
+  transition:0.25s;
+}
+
+.grid .card:hover{
+  transform:translateY(-4px);
+  box-shadow:0 12px 25px rgba(0,0,0,0.4);
+}
+
+/* BUTTONS */
+.inc, .dec{
+  width:28px;
+  height:28px;
+  border-radius:6px;
+  border:none;
+  background:#1e293b;
+  color:white;
+  cursor:pointer;
+  font-size:16px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.inc:hover{
+  background:#22c55e;
+}
+
+.dec:hover{
+  background:#ef4444;
+}
+
+/* CART BAR */
+#cartBar{
+  backdrop-filter:blur(10px);
+}
+
+/* SEARCH */
+#businessSearch:focus{
+  border-color:#2563eb;
+  box-shadow:0 0 10px rgba(37,99,235,0.5);
+}
