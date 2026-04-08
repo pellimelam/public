@@ -369,6 +369,51 @@ applySEO(
 data
 );
 
+
+/* =========================
+   HERO SLIDER (FINAL FIXED)
+========================= */
+
+const slides = data.slides || [];
+
+const finalSlides = slides.length
+  ? slides
+  : Array(5).fill({ img: "", link: "" });
+
+const sliderHTML = `
+<div class="card" style="padding:0;overflow:hidden;">
+
+  <div class="slider" id="slider">
+
+    <div class="slides">
+
+      ${finalSlides.map(s => `
+
+        <div class="slide">
+
+          ${
+            s.img
+              ? `<a href="${s.link || '#'}" target="_blank">
+                  <img src="${s.img}" loading="lazy">
+                </a>`
+              : `<div class="empty-slide">
+                   Contact support to add images
+                 </div>`
+          }
+
+        </div>
+
+      `).join("")}
+
+    </div>
+
+    <div class="dots"></div>
+
+  </div>
+
+</div>
+`;
+
 const profileUrl = window.location.href;
 
 const qr = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${profileUrl}`;
@@ -395,6 +440,8 @@ if(!isStandalone && isInstalled){
 }
    
 const content = `
+
+${sliderHTML}
 
 <div class="hero">
 
@@ -423,6 +470,11 @@ box-shadow:0 0 40px rgba(59,130,246,0.6);
 </div>
 
 </div>
+
+
+
+
+
 
 
 <!-- ✅ ADDRESS BOX (NEW) -->
@@ -654,7 +706,134 @@ link.href = `/manifest.json?name=${encodeURIComponent(data.firstName)}&start=${e
 
 
 
+/* =========================
+SLIDER LOGIC (FINAL)
+========================= */
 
+const slider = document.getElementById("slider");
+
+if(slider){
+
+  const slidesEl = slider.querySelector(".slides");
+  const total = slidesEl.children.length;
+  const dotsEl = slider.querySelector(".dots");
+
+  let index = 0;
+  let startX = 0;
+  let isTouching = false;
+
+  /* =========================
+     DOTS (CLEAN INIT)
+  ========================= */
+
+  dotsEl.innerHTML = "";
+
+  for(let i=0;i<total;i++){
+    const d = document.createElement("div");
+
+    if(i === 0) d.classList.add("active");
+
+    d.onclick = ()=>{
+      index = i;
+      update();
+    };
+
+    dotsEl.appendChild(d);
+  }
+
+  const dots = dotsEl.children;
+
+  /* =========================
+     UPDATE FUNCTION
+  ========================= */
+
+  function update(){
+    slidesEl.style.transform = `translateX(-${index * 100}%)`;
+
+    for(let i=0;i<dots.length;i++){
+      dots[i].classList.toggle("active", i === index);
+    }
+  }
+
+  /* =========================
+     AUTO SLIDE (SAFE)
+  ========================= */
+
+  if(window.__SLIDER_INTERVAL){
+    clearInterval(window.__SLIDER_INTERVAL);
+  }
+
+  function startAuto(){
+    window.__SLIDER_INTERVAL = setInterval(()=>{
+      if(!isTouching){
+        index = (index + 1) % total;
+        update();
+      }
+    }, 4000);
+  }
+
+  function stopAuto(){
+    if(window.__SLIDER_INTERVAL){
+      clearInterval(window.__SLIDER_INTERVAL);
+    }
+  }
+
+  startAuto();
+
+  /* =========================
+     SWIPE (MOBILE + DESKTOP)
+  ========================= */
+
+  slider.addEventListener("touchstart", e=>{
+    isTouching = true;
+    startX = e.touches[0].clientX;
+    stopAuto();
+  });
+
+  slider.addEventListener("touchend", e=>{
+    const diff = e.changedTouches[0].clientX - startX;
+
+    if(diff > 50) index = Math.max(0, index - 1);
+    else if(diff < -50) index = Math.min(total - 1, index + 1);
+
+    update();
+
+    isTouching = false;
+    startAuto();
+  });
+
+  /* DESKTOP DRAG */
+  let mouseDown = false;
+
+  slider.addEventListener("mousedown", e=>{
+    mouseDown = true;
+    isTouching = true;
+    startX = e.clientX;
+    stopAuto();
+  });
+
+  slider.addEventListener("mouseup", e=>{
+    if(!mouseDown) return;
+
+    const diff = e.clientX - startX;
+
+    if(diff > 50) index = Math.max(0, index - 1);
+    else if(diff < -50) index = Math.min(total - 1, index + 1);
+
+    update();
+
+    mouseDown = false;
+    isTouching = false;
+    startAuto();
+  });
+
+  slider.addEventListener("mouseleave", ()=>{
+    mouseDown = false;
+    isTouching = false;
+    startAuto();
+  });
+
+}
 
    
    
@@ -673,6 +852,7 @@ data.phone
 }
 
 });
+
 
 
 }
