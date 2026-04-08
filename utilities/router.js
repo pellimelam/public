@@ -510,7 +510,7 @@ Gallery
 </a>
 
 <a href="/${slug}/videos"
-style="background:#0ea5e9;padding:10px 14px;border-radius:8px;color:white;text-decoration:none;">
+style="background:#f59e0b;padding:10px 14px;border-radius:8px;color:white;text-decoration:none;">
 Videos
 </a>
 
@@ -520,7 +520,7 @@ About
 </a>
 
 <a href="https://apps.vidhwaan.com" target="_blank"
-style="background:#0ea5e9;padding:10px 14px;border-radius:8px;color:white;text-decoration:none;">
+style="background:#9333ea;padding:10px 14px;border-radius:8px;color:white;text-decoration:none;">
 My Apps
 </a>
 
