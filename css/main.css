@@ -234,3 +234,66 @@ padding:18px;
 }
 
 }
+
+/* =========================
+SLIDER (FINAL PREMIUM)
+========================= */
+
+.slider{
+position:relative;
+overflow:hidden;
+border-radius:12px;
+}
+
+.slides{
+display:flex;
+transition:transform .6s ease;
+}
+
+.slide{
+min-width:100%;
+height:220px;
+position:relative;
+}
+
+.slide img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+.empty-slide{
+width:100%;
+height:100%;
+display:flex;
+align-items:center;
+justify-content:center;
+background:rgba(255,255,255,0.03);
+color:#64748b;
+font-size:12px;
+text-align:center;
+padding:10px;
+}
+
+.dots{
+position:absolute;
+bottom:10px;
+left:50%;
+transform:translateX(-50%);
+display:flex;
+gap:6px;
+}
+
+.dots div{
+width:8px;
+height:8px;
+border-radius:50%;
+background:#94a3b8;
+opacity:.5;
+cursor:pointer;
+}
+
+.dots .active{
+background:white;
+opacity:1;
+}
