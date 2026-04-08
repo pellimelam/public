@@ -482,7 +482,7 @@ color:white;
 border:none;
 cursor:pointer;
 ">
-Download Card
+My QR Card
 </button>
 
 </div>
@@ -493,49 +493,31 @@ Download Card
 <!-- VIDHWAAN ECOSYSTEM -->
 <div class="card">
 
-<h3>Vidhwaan Ecosystem</h3>
+<h3>My Ecosystem</h3>
 
 <div style="display:flex;gap:10px;flex-wrap:wrap;">
 
-<a href="https://vidhwaan.com" target="_blank"
+
+<a href="/${geoPath}/gallery"
 style="background:#1e40af;padding:10px 14px;border-radius:8px;color:white;text-decoration:none;">
-Vidhwaan Group
+Gallery
 </a>
 
-<a href="https://tech.vidhwaan.com" target="_blank"
+<a href="/${geoPath}/videos"
 style="background:#0ea5e9;padding:10px 14px;border-radius:8px;color:white;text-decoration:none;">
-Vidhwaan Technology
+Videos
 </a>
 
-<a href="https://ai.vidhwaan.com" target="_blank"
+<a href="/${geoPath}/about"
 style="background:#0ea5e9;padding:10px 14px;border-radius:8px;color:white;text-decoration:none;">
-Vidhwaan AI
+About
 </a>
 
 <a href="https://apps.vidhwaan.com" target="_blank"
 style="background:#0ea5e9;padding:10px 14px;border-radius:8px;color:white;text-decoration:none;">
-Vidhwaan Store
+My Apps
 </a>
 
-<a href="https://apps.vidhwaan.com" target="_blank"
-style="background:#0ea5e9;padding:10px 14px;border-radius:8px;color:white;text-decoration:none;">
-Vidhwaan Apps
-</a>
-
-<a href="https://pellimelam.vidhwaan.com" target="_blank"
-style="background:#f59e0b;padding:10px 14px;border-radius:8px;color:white;text-decoration:none;">
-Vidhwaan PelliMelam
-</a>
-
-<a href="https://booking.vidhwaan.com" target="_blank"
-style="background:#f59e0b;padding:10px 14px;border-radius:8px;color:white;text-decoration:none;">
-Book PelliMelam
-</a>
-
-<a href="https://foundation.vidhwaan.com" target="_blank"
-style="background:#9333ea;padding:10px 14px;border-radius:8px;color:white;text-decoration:none;">
-Vidhwaan Foundation
-</a>
 
 </div>
 
@@ -578,6 +560,11 @@ Download
 <a href="https://wa.me/919440246101"
 style="background:#22c55e;padding:10px 14px;border-radius:8px;color:white;text-decoration:none;">
 WhatsApp
+</a>
+
+<a href="https://vidhwaan.com" target="_blank"
+style="background:#9333ea;padding:10px 14px;border-radius:8px;color:white;text-decoration:none;">
+Vidhwaan Group
 </a>
 
 </div>
