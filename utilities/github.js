@@ -76,6 +76,12 @@ const repo = uid || phone; // fallback
 const fullData = {
 ...data,
 
+app: {
+  name: `VID ${data.firstName}`,
+  short_name: data.firstName,
+  icon: data.profileImage || ""
+},
+
 profileImage: data.profileImage || "",
 gallery:[],
 videos:[],
