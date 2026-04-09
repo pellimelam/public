@@ -8,15 +8,9 @@ self.addEventListener("fetch", (event) => {
 
   const url = new URL(event.request.url);
 
-  /* =========================
-     DYNAMIC MANIFEST
-  ========================= */
   if (url.pathname === "/manifest.json") {
 
     const phone = url.searchParams.get("phone");
-
-    /* 🔥 CRITICAL FIX: get real install URL */
-    const start = url.searchParams.get("start") || "/";
 
     event.respondWith((async () => {
 
@@ -35,26 +29,23 @@ self.addEventListener("fetch", (event) => {
 
       const manifest = {
 
-        /* ✅ MULTI APP ID */
-        id: `/${slug}`,
+        /* 🔥 THIS IS THE KEY */
+        id: `vidhwaan-${slug}`,
 
-        /* ✅ NAME */
         name: app.name || `VID ${data?.firstName || "Vidhwaan"}`,
         short_name: app.short_name || data?.firstName || "Vidhwaan",
 
-        /* 🔥 FIX: USE REAL INSTALL PATH */
-        start_url: start,
+        /* 🔥 FIXED ENTRY */
+        start_url: `/${slug}`,
 
-        /* ✅ ALLOW FULL SITE */
+        /* 🔥 FULL CONTROL */
         scope: `/`,
 
         display: "standalone",
-        display_override: ["standalone"],
 
         background_color: "#020617",
         theme_color: "#1e3a8a",
 
-        /* ✅ ICON */
         icons: [
           {
             src: app.icon || "/icons1/icon-192.png",
@@ -78,8 +69,5 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  /* =========================
-     NORMAL REQUESTS
-  ========================= */
   event.respondWith(fetch(event.request));
 });
