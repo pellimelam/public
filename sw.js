@@ -72,5 +72,18 @@ self.addEventListener("fetch", (event)=>{
     return;
   }
 
+  /* 🔥 KEEP NAVIGATION INSIDE PWA */
+  if (event.request.mode === "navigate") {
+    event.respondWith(
+      fetch(event.request).then(res => {
+        return res;
+      }).catch(() => {
+        return fetch("/");
+      })
+    );
+    return;
+  }
+
+  /* NORMAL REQUESTS */
   event.respondWith(fetch(event.request));
 });
