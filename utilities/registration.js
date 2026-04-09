@@ -35,6 +35,7 @@ Register as Vidhwaan
 <option value="">Select Profession</option>
 
 <!-- General -->
+<option>Vidhwaan</option>
 <option>Student</option>
 <option>Job Seeker</option>
 <option>Self Employed</option>
