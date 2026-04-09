@@ -14,7 +14,7 @@ font-size:26px;
 margin-bottom:25px;
 font-weight:600;
 ">
-Register as Partner
+Register as Success Partner
 </h2>
 
 <div class="card">
