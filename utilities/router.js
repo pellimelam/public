@@ -1638,36 +1638,8 @@ initUI(data);
 });
 
 
-
-
-const searchInput = document.getElementById("businessSearch");
-
-if(searchInput){
-
-  searchInput.oninput = ()=>{
-
-    const q = searchInput.value.toLowerCase().trim();
-
-    const filtered = finalCats.map(cat=>{
-
-      const matchedItems = (cat.items || []).filter(item=>
-        item.name.toLowerCase().includes(q) ||
-        (item.weight || "").toLowerCase().includes(q) ||
-        cat.name.toLowerCase().includes(q)
-      );
-
-      return {
-        ...cat,
-        items: matchedItems
-      };
-
-    });
-
-    renderFilteredItems(filtered);
-
-  };
-
 }
+
 
 
 
@@ -1920,7 +1892,7 @@ if(proceedBtn){
 
 }
 
-}
+
 
 
 
@@ -2016,6 +1988,34 @@ function renderFilteredItems(filteredCats){
 
 
 
+const searchInput = document.getElementById("businessSearch");
+
+if(searchInput){
+
+  searchInput.oninput = ()=>{
+
+    const q = searchInput.value.toLowerCase().trim();
+
+    const filtered = finalCats.map(cat=>{
+
+      const matchedItems = (cat.items || []).filter(item=>
+        item.name.toLowerCase().includes(q) ||
+        (item.weight || "").toLowerCase().includes(q) ||
+        cat.name.toLowerCase().includes(q)
+      );
+
+      return {
+        ...cat,
+        items: matchedItems
+      };
+
+    });
+
+    renderFilteredItems(filtered);
+
+  };
+
+}
 
 
    
