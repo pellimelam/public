@@ -10,35 +10,38 @@ self.addEventListener("fetch", (event)=>{
 
   const url = new URL(event.request.url);
 
-  /* =========================================
+  /* ===============================
      🔥 DYNAMIC MANIFEST (PER USER)
-  ========================================= */
+  =============================== */
 
   if(url.pathname === "/manifest.json"){
 
-    event.respondWith((async () => {
+    event.respondWith((async ()=>{
 
       try{
 
-        const path = url.searchParams.get("start") || "/";
+        const start = url.searchParams.get("start") || "/";
 
-        /* ✅ EXTRACT PHONE */
-        const phoneMatch = path.match(/(\d{10})/);
-        const phone = phoneMatch ? phoneMatch[1] : null;
+        /* 🔍 EXTRACT PHONE FROM PATH */
+        const match = start.match(/(\d{10})/);
+        const phone = match ? match[1] : null;
 
         let data = null;
 
         if(phone){
-          const res = await fetch(`https://raw.githubusercontent.com/Vidhwaan1/${phone}/main/data.json`);
-          if(res.ok){
-            data = await res.json();
-          }
+          try{
+            const res = await fetch(
+              `https://raw.githubusercontent.com/Vidhwaan1/${phone}/main/data.json`
+            );
+            if(res.ok){
+              data = await res.json();
+            }
+          }catch(e){}
         }
 
-        /* ✅ APP CONFIG */
+        /* ✅ SAFE FALLBACKS (OLD USERS SAFE) */
         const appName = data?.app?.name || "Vidhwaan";
         const shortName = data?.app?.short_name || appName;
-
         const icon = data?.app?.icon || "/icons1/icon-192.png";
 
         /* ✅ FINAL MANIFEST */
@@ -46,11 +49,10 @@ self.addEventListener("fetch", (event)=>{
           name: appName,
           short_name: shortName,
 
-          start_url: path,              // 🔥 FIXED (no redirect bug)
-          scope: path,                 // 🔥 PER USER APP
+          start_url: start,   // 🔥 opens correct user
+          scope: start,       // 🔥 per-user app (multi install)
 
           display: "standalone",
-          display_override: ["standalone", "minimal-ui"],
 
           background_color: "#020617",
           theme_color: "#1e3a8a",
@@ -75,9 +77,8 @@ self.addEventListener("fetch", (event)=>{
 
       }catch(e){
 
-        /* ✅ SAFE FALLBACK (OLD USERS SAFE) */
+        /* 🔁 fallback to static manifest (no break) */
         return fetch("/manifest.json");
-
       }
 
     })());
@@ -85,25 +86,9 @@ self.addEventListener("fetch", (event)=>{
     return;
   }
 
-  /* =========================================
-     🔥 ISOLATION LOGIC (CRITICAL FIX)
-  ========================================= */
-
-  const scopePath = self.registration.scope.replace(self.location.origin, "");
-
-  // 🚫 BLOCK requests outside app scope
-  if(scopePath !== "/" && !url.pathname.startsWith(scopePath)){
-    return; // let browser handle normally
-  }
-
-  // 🚫 NEVER hijack root (main site)
-  if(url.pathname === "/"){
-    return;
-  }
-
-  /* =========================================
-     NORMAL REQUESTS
-  ========================================= */
+  /* ===============================
+     🌐 NORMAL REQUESTS (NO HIJACK)
+  =============================== */
 
   event.respondWith(fetch(event.request));
 
