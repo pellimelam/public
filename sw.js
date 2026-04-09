@@ -43,7 +43,7 @@ self.addEventListener("fetch", (event)=>{
         short_name: finalShort,
 
         start_url: `/${slug}`,
-        scope: `/`,   
+        scope: `/${slug}`,   
         
         display: "standalone",
         background_color: "#020617",
