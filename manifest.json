@@ -1,7 +1,7 @@
 {
-  "name": "Vidhwaan App",
+  "name": "Vidhwaan",
   "short_name": "Vidhwaan",
-  "start_url": "/",
+  "start_url": "/?fallback=true",
   "display": "standalone",
   "background_color": "#020617",
   "theme_color": "#1e3a8a",
