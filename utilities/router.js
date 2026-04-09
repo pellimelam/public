@@ -8,11 +8,8 @@ document.getElementById("app").innerHTML = content;
 
 export function initRouter(){
 
-/* 🔥 ALWAYS ENABLE APP MODE FOR ANY PROFILE ROUTE */
-if(window.location.pathname.match(/\d{10}/)){
-  if(!document.getElementById("app")){
-    document.body.innerHTML = "<div id='app'></div>";
-  }
+if(window.location.pathname.match(/\d{10}$/)){
+document.body.innerHTML = "<div id='app'></div>";
 }
 
 let path = window.location.pathname.toLowerCase();
@@ -48,11 +45,6 @@ break;
 }
 
 if(!phone) return;
-
-/* 🔥 GUARANTEE APP SHELL */
-if(!document.getElementById("app")){
-  document.body.innerHTML = "<div id='app'></div>";
-}
 
 // ✅ REMOVE MAIN SUPPORT BUTTON ON PROFILE PAGE
 const supportBtn = document.getElementById("supportBtn");
@@ -821,8 +813,8 @@ if("serviceWorker" in navigator && !window.__SW_REGISTERED){
 
    
 /* 🔥 DYNAMIC PER USER */
+link.href = `/manifest.json?name=${encodeURIComponent(data.firstName)}&start=${encodeURIComponent(window.location.pathname)}`;
 
-link.href = `/manifest.json?phone=${data.phone}`;
 
 
 
