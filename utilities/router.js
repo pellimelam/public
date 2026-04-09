@@ -1947,7 +1947,6 @@ if(proceedBtn){
     message += `💰 Total: ₹${total}\n`;
     message += `━━━━━━━━━━━━━━━\n\n`;
 
-    message += `📍 Customer Details:\nName: _______\nAddress: _______`;
 
     const url = `https://wa.me/91${data.phone}?text=${encodeURIComponent(message)}`;
 
