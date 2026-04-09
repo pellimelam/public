@@ -1574,9 +1574,10 @@ const cartHTML = `
   width:100%;
   background:#020617;
   border-top:1px solid rgba(148,163,184,0.2);
-  padding:10px;
+  padding:12px;
   display:none;
   z-index:999;
+  backdrop-filter: blur(10px);
 ">
 
   <div style="
@@ -1586,6 +1587,7 @@ const cartHTML = `
     justify-content:space-between;
     align-items:center;
     gap:10px;
+    flex-wrap:wrap;
   ">
 
     <div>
@@ -1594,15 +1596,17 @@ const cartHTML = `
     </div>
 
     <button id="cartProceed"
-      style="
-        background:#facc15;
-        color:black;
-        padding:10px 20px;
-        border-radius:999px;
-        border:none;
-        font-weight:600;
-        cursor:pointer;
-      ">
+    style="
+      background:#facc15;
+      color:black;
+      padding:12px 18px;
+      border-radius:999px;
+      border:none;
+      font-weight:600;
+      cursor:pointer;
+      width:100%;
+      max-width:180px;
+    ">
       Proceed
     </button>
 
@@ -1859,11 +1863,13 @@ if(proceedBtn){
 
   proceedBtn.onclick = ()=>{
 
-    let message = `🛒 *New Order*\n\n`;
+    let message = `🛒 *New Order Request*\n`;
+    message += `━━━━━━━━━━━━━━━\n\n`;
 
     let total = 0;
+    let count = 0;
 
-    Object.entries(window.__CART).forEach(([key,val])=>{
+    Object.entries(window.__CART).forEach(([key,val],index)=>{
 
       const [catIndex,itemIndex] = key.split("_").map(Number);
       const item = finalCats[catIndex]?.items?.[itemIndex];
@@ -1872,13 +1878,24 @@ if(proceedBtn){
 
       const price = item.price * val.qty;
       total += price;
+      count += val.qty;
 
-      message += `• ${item.name} (${item.weight}) x ${val.qty} = ₹${price}\n`;
+      message += `${index+1}. *${item.name}*\n`;
+      message += `   Qty: ${val.qty}\n`;
+      message += `   Price: ₹${item.price}\n`;
+      message += `   Total: ₹${price}\n\n`;
     });
 
-    message += `\n*Total: ₹${total}*`;
+    message += `━━━━━━━━━━━━━━━\n`;
+    message += `🧾 *Items:* ${count}\n`;
+    message += `💰 *Grand Total:* ₹${total}\n`;
+    message += `━━━━━━━━━━━━━━━\n\n`;
 
-    const phone = data.phone; // registered number
+    message += `📍 *Customer Details*\n`;
+    message += `Name: _______\n`;
+    message += `Address: _______\n`;
+
+    const phone = data.phone;
 
     const url = `https://wa.me/91${phone}?text=${encodeURIComponent(message)}`;
 
@@ -1887,7 +1904,6 @@ if(proceedBtn){
   };
 
 }
-
 
 
 
@@ -1991,6 +2007,11 @@ if(searchInput){
   searchInput.oninput = ()=>{
 
     const q = searchInput.value.toLowerCase().trim();
+
+    if(!q){
+      renderItems(window.__SELECTED_CATEGORY || 0);
+      return;
+    }
 
     const filtered = finalCats.map(cat=>{
 
