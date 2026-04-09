@@ -354,6 +354,97 @@ return str.split("-")[0].replace(/\b\w/g,c=>c.toUpperCase());
 
 
 
+function initSlider(slider){
+
+  if(!slider || slider.__INIT) return;
+
+  slider.__INIT = true;
+
+  const slidesEl = slider.querySelector(".slides");
+  const dotsEl = slider.querySelector(".dots");
+  const total = slidesEl.children.length;
+
+  let index = 0;
+  let startX = 0;
+  let isTouching = false;
+  let interval = null;
+
+  /* DOTS */
+  dotsEl.innerHTML = "";
+
+  for(let i = 0; i < total; i++){
+    const d = document.createElement("div");
+    if(i === 0) d.classList.add("active");
+
+    d.onclick = ()=>{
+      index = i;
+      update();
+    };
+
+    dotsEl.appendChild(d);
+  }
+
+  const dots = dotsEl.children;
+
+  function update(){
+    slidesEl.style.transform = `translateX(-${index * 100}%)`;
+
+    for(let i=0;i<dots.length;i++){
+      dots[i].classList.toggle("active", i===index);
+    }
+  }
+
+  function startAuto(){
+    stopAuto();
+
+    if(total <= 1) return;
+
+    interval = setInterval(()=>{
+      if(!isTouching){
+        index = (index + 1) % total;
+        update();
+      }
+    }, 6000);
+  }
+
+  function stopAuto(){
+    if(interval){
+      clearInterval(interval);
+      interval = null;
+    }
+  }
+
+  startAuto();
+
+  /* TOUCH */
+  slider.addEventListener("touchstart", e=>{
+    isTouching = true;
+    startX = e.touches[0].clientX;
+    stopAuto();
+  });
+
+  slider.addEventListener("touchend", e=>{
+    const diff = e.changedTouches[0].clientX - startX;
+
+    if(diff > 50) index = Math.max(0, index - 1);
+    else if(diff < -50) index = Math.min(total - 1, index + 1);
+
+    update();
+    isTouching = false;
+    startAuto();
+  });
+
+  /* CLEANUP */
+  const observer = new MutationObserver(()=>{
+    if(!document.body.contains(slider)){
+      stopAuto();
+      observer.disconnect();
+    }
+  });
+
+  observer.observe(document.body, { childList:true, subtree:true });
+}
+
 /* =========================
    HOME
 ========================= */
@@ -658,6 +749,9 @@ requestAnimationFrame(()=>{
 
 initUI(data);
 
+const slider = document.getElementById("slider");
+initSlider(slider);
+
 
 
 /* =========================
@@ -721,163 +815,7 @@ link.href = `/manifest.json?name=${encodeURIComponent(data.firstName)}&start=${e
 
 
 
-const slider = document.getElementById("slider");
 
-if(slider){
-
-  /* =========================
-     SINGLE INIT (CRITICAL)
-  ========================= */
-
-  if(slider.__INIT) return;
-  slider.__INIT = true;
-
-  const slidesEl = slider.querySelector(".slides");
-  const dotsEl = slider.querySelector(".dots");
-  const total = slidesEl.children.length;
-
-  let index = 0;
-  let startX = 0;
-  let isTouching = false;
-  let interval = null;
-
-  /* =========================
-     DOTS
-  ========================= */
-
-  dotsEl.innerHTML = "";
-
-  for(let i = 0; i < total; i++){
-    const d = document.createElement("div");
-
-    if(i === 0) d.classList.add("active");
-
-    d.onclick = ()=>{
-      index = i;
-      update();
-    };
-
-    dotsEl.appendChild(d);
-  }
-
-  const dots = dotsEl.children;
-
-  /* =========================
-     UPDATE
-  ========================= */
-
-  function update(){
-    slidesEl.style.transform = `translateX(-${index * 100}%)`;
-
-    for(let i = 0; i < dots.length; i++){
-      dots[i].classList.toggle("active", i === index);
-    }
-  }
-
-  /* =========================
-     AUTO SLIDE (ONLY IF >1)
-  ========================= */
-
-  function startAuto(){
-    stopAuto();
-
-    if(total <= 1) return; // ✅ only skip auto, not entire slider
-
-    interval = setInterval(()=>{
-      if(!isTouching){
-        index = (index + 1) % total;
-        update();
-      }
-    }, 6000);
-  }
-
-  function stopAuto(){
-    if(interval){
-      clearInterval(interval);
-      interval = null;
-    }
-  }
-
-  startAuto();
-
-  /* =========================
-     TOUCH SWIPE
-  ========================= */
-
-  slider.addEventListener("touchstart", e=>{
-    if(total <= 1) return;
-
-    isTouching = true;
-    startX = e.touches[0].clientX;
-    stopAuto();
-  });
-
-  slider.addEventListener("touchend", e=>{
-    if(total <= 1) return;
-
-    const diff = e.changedTouches[0].clientX - startX;
-
-    if(diff > 50) index = Math.max(0, index - 1);
-    else if(diff < -50) index = Math.min(total - 1, index + 1);
-
-    update();
-
-    isTouching = false;
-    startAuto();
-  });
-
-  /* =========================
-     DESKTOP DRAG
-  ========================= */
-
-  let mouseDown = false;
-
-  slider.addEventListener("mousedown", e=>{
-    if(total <= 1) return;
-
-    mouseDown = true;
-    isTouching = true;
-    startX = e.clientX;
-    stopAuto();
-  });
-
-  slider.addEventListener("mouseup", e=>{
-    if(!mouseDown || total <= 1) return;
-
-    const diff = e.clientX - startX;
-
-    if(diff > 50) index = Math.max(0, index - 1);
-    else if(diff < -50) index = Math.min(total - 1, index + 1);
-
-    update();
-
-    mouseDown = false;
-    isTouching = false;
-    startAuto();
-  });
-
-  slider.addEventListener("mouseleave", ()=>{
-    if(total <= 1) return;
-
-    mouseDown = false;
-    isTouching = false;
-    startAuto();
-  });
-
-  /* =========================
-     CLEANUP (SPA SAFE)
-  ========================= */
-
-  const observer = new MutationObserver(()=>{
-    if(!document.body.contains(slider)){
-      stopAuto();
-      observer.disconnect();
-    }
-  });
-
-  observer.observe(document.body, { childList: true, subtree: true });
-
-}
 
    
    
@@ -1642,6 +1580,9 @@ renderLayout(layout(data, content));
 
 requestAnimationFrame(()=>{
 initUI(data);
+
+const slider = document.getElementById("slider");
+initSlider(slider);
 
 
 
