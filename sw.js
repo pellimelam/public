@@ -13,39 +13,54 @@ self.addEventListener("fetch", (event)=>{
   /* 🔥 HANDLE MANIFEST DYNAMICALLY */
   if(url.pathname === "/manifest.json"){
 
-    const name = url.searchParams.get("name") || "Vidhwaan";
-    const start = url.searchParams.get("start") || "/";
+    const phone = url.searchParams.get("phone");
 
-    const manifest = {
-      name: `VID ${name}`,
-      short_name: `VID ${name}`,
-      start_url: start,
-      display: "standalone",
-      background_color: "#020617",
-      theme_color: "#1e3a8a",
-      icons: [
-        {
-          src: "/icons1/icon-192.png",
-          sizes: "192x192",
-          type: "image/png"
-        },
-        {
-          src: "/icons1/icon-512.png",
-          sizes: "512x512",
-          type: "image/png"
-        }
-      ]
-    };
+    event.respondWith((async ()=>{
 
-    event.respondWith(
-      new Response(JSON.stringify(manifest), {
+      let data = null;
+
+      try{
+        const res = await fetch(`https://raw.githubusercontent.com/Vidhwaan1/${phone}/main/data.json`);
+        data = await res.json();
+      }catch(e){}
+
+      const app = data?.app || {};
+
+      const manifest = {
+        name: app.name || "Vidhwaan",
+        short_name: app.short_name || "Vidhwaan",
+
+        /* 🔥 CRITICAL FOR MULTI APP */
+        start_url: `/app/${phone}/`,
+        scope: `/app/${phone}/`,
+
+        display: "standalone",
+        background_color: "#020617",
+        theme_color: "#1e3a8a",
+
+        icons: [
+          {
+            src: app.icon || "/icons1/icon-192.png",
+            sizes: "192x192",
+            type: "image/png"
+          },
+          {
+            src: app.icon || "/icons1/icon-512.png",
+            sizes: "512x512",
+            type: "image/png"
+          }
+        ]
+      };
+
+      return new Response(JSON.stringify(manifest), {
         headers: { "Content-Type": "application/json" }
-      })
-    );
+      });
+
+    })());
 
     return;
   }
-
+  
   /* NORMAL REQUESTS */
   event.respondWith(fetch(event.request));
 });
