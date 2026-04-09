@@ -546,13 +546,18 @@ const content = `
 <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
 
 <!-- PROFILE IMAGE -->
-<img src="https://ui-avatars.com/api/?name=${data.firstName}+${data.lastName}&background=1e3a8a&color=fff&size=200"
+<img src="${
+  data.profileImage
+    ? data.profileImage
+    : `https://ui-avatars.com/api/?name=${data.firstName}+${data.lastName}&background=1e3a8a&color=fff&size=200`
+}"
 style="
 border-radius:50%;
 width:120px;
 height:120px;
 border:3px solid rgba(255,255,255,0.3);
 box-shadow:0 0 40px rgba(59,130,246,0.6);
+object-fit:cover;
 ">
 
 <div>
