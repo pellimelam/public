@@ -26,9 +26,18 @@ self.addEventListener("fetch", (event)=>{
 
       const app = data?.app || {};
 
+      /* 🔥 FINAL NAME LOGIC */
+      const finalName =
+        app.name ||
+        (data?.firstName ? `VID ${data.firstName}` : "VID Vidhwaan");
+
+      const finalShort =
+        app.short_name ||
+        (data?.firstName ? data.firstName : "Vidhwaan");
+
       const manifest = {
-        name: app.name || "Vidhwaan",
-        short_name: app.short_name || "Vidhwaan",
+        name: finalName,
+        short_name: finalShort,
 
         /* 🔥 CRITICAL FOR MULTI APP */
         start_url: `/app/${phone}/`,
@@ -60,7 +69,7 @@ self.addEventListener("fetch", (event)=>{
 
     return;
   }
-  
+
   /* NORMAL REQUESTS */
   event.respondWith(fetch(event.request));
 });
