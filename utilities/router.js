@@ -814,8 +814,8 @@ if("serviceWorker" in navigator && !window.__SW_REGISTERED){
    
 /* 🔥 DYNAMIC PER USER */
 
-link.href = `/manifest.json?phone=${data.phone}&start=${encodeURIComponent(window.location.pathname)}`;
 
+link.href = `/manifest.json?phone=${data.phone}`;
 
 
 
