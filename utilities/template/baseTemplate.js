@@ -294,6 +294,7 @@ Vidhwaan
 <a href="#" id="navHome">Home</a>
 <a href="#" id="navGallery">Gallery</a>
 <a href="#" id="navVideos">Videos</a>
+<a href="#" id="navBusiness">Business</a>
 <a href="#" id="navAbout">About</a>
 </div>
 
@@ -308,6 +309,7 @@ Vidhwaan
 <a href="#" id="mNavHome">Home</a>
 <a href="#" id="mNavGallery">Gallery</a>
 <a href="#" id="mNavVideos">Videos</a>
+<a href="#" id="mNavBusiness">Business</a>
 <a href="#" id="mNavAbout">About</a>
 </div>
 
