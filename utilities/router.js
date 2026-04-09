@@ -1672,17 +1672,32 @@ cats.forEach((el,i)=>{
   };
 });
 
+/* =========================
+   DEFAULT CATEGORY LOAD (ULTRA STABLE)
+========================= */
+
 if(cats.length){
 
   window.__SELECTED_CATEGORY = 0;
 
-  // STEP 1: render empty container first
   const container = document.getElementById("itemsContainer");
+
+  /* 🔥 SKELETON FIRST */
   if(container){
-    container.innerHTML = `<div style="height:200px"></div>`;
+    container.innerHTML = `
+    <div class="grid">
+      ${Array(6).fill(0).map(()=>`
+        <div class="card" style="padding:10px;">
+          <div class="skeleton" style="aspect-ratio:1/1;border-radius:10px;"></div>
+          <div class="skeleton" style="height:14px;margin-top:8px;"></div>
+          <div class="skeleton" style="height:12px;margin-top:6px;width:60%;"></div>
+        </div>
+      `).join("")}
+    </div>
+    `;
   }
 
-  // STEP 2: allow browser to paint UI first
+  /* 🔥 DOUBLE FRAME RENDER (NO FLASH) */
   requestAnimationFrame(()=>{
     requestAnimationFrame(()=>{
 
@@ -1699,7 +1714,6 @@ if(cats.length){
     });
   });
 }
-
 
 
 /* =========================
@@ -1738,73 +1752,84 @@ function renderItems(catIndex){
   const items = cat.items || [];
 
   requestAnimationFrame(()=>{
-    container.innerHTML = `...`;
-  });
-  <div class="grid">
 
-  ${items.map((item,i)=>{
+    container.innerHTML = `
+    <div class="grid">
 
-    const key = `${catIndex}_${i}`;
-    const qty = window.__CART[key]?.qty || 0;
+    ${items.map((item,i)=>{
 
-    return `
+      const key = `${catIndex}_${i}`;
+      const qty = window.__CART[key]?.qty || 0;
 
-    <div class="card" style="padding:10px;">
+      return `
 
-      <div style="
-        aspect-ratio:1/1;
-        border-radius:10px;
-        overflow:hidden;
-        background:#0f172a;
-      ">
+      <div class="card item-card" style="padding:10px;">
 
-        ${
-          item.img
-          ? `<img src="${item.img}" loading="lazy" style="width:100%;height:100%;object-fit:cover;">`
-          : `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#64748b;">No Image</div>`
-        }
+        <div style="
+          aspect-ratio:1/1;
+          border-radius:10px;
+          overflow:hidden;
+          background:#0f172a;
+        ">
+
+          ${
+            item.img
+            ? `<img src="${item.img}" loading="lazy"
+                 onload="this.style.opacity=1"
+                 style="width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .4s ease;">`
+            : `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#64748b;">No Image</div>`
+          }
+
+        </div>
+
+        <div style="margin-top:8px;font-weight:600;font-size:14px;">
+          ${item.name}
+        </div>
+
+        <div style="font-size:12px;color:#94a3b8;">
+          ${item.weight || ""}
+        </div>
+
+        <div style="margin-top:5px;font-weight:600;">
+          ₹${item.price}
+        </div>
+
+        <div style="
+          margin-top:8px;
+          display:flex;
+          justify-content:center;
+          align-items:center;
+          gap:8px;
+        ">
+
+          <button class="dec" data-key="${key}">−</button>
+          <div>${qty}</div>
+          <button class="inc" data-key="${key}">+</button>
+
+        </div>
 
       </div>
 
-      <div style="margin-top:8px;font-weight:600;font-size:14px;">
-        ${item.name}
-      </div>
-
-      <div style="font-size:12px;color:#94a3b8;">
-        ${item.weight || ""}
-      </div>
-
-      <div style="margin-top:5px;font-weight:600;">
-        ₹${item.price}
-      </div>
-
-      <div style="
-        margin-top:8px;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        gap:8px;
-      ">
-
-        <button class="dec" data-key="${key}">−</button>
-
-        <div>${qty}</div>
-
-        <button class="inc" data-key="${key}">+</button>
-
-      </div>
+      `;
+    }).join("")}
 
     </div>
-
     `;
-  }).join("")}
 
-  </div>
-  `;
+    /* 🔥 FADE-IN */
+    requestAnimationFrame(()=>{
+      document.querySelectorAll(".item-card").forEach((el,i)=>{
+        setTimeout(()=>{
+          el.classList.add("show");
+        }, i * 40);
+      });
+    });
 
-  bindCartEvents();
+    bindCartEvents();
+    updateCartBar();
+
+  });
 }
-
 
 /* =========================
    CART BUTTON EVENTS
@@ -1882,8 +1907,6 @@ function updateCartBar(){
 }
 
 
-
-
 /* =========================
    WHATSAPP ORDER
 ========================= */
@@ -1918,21 +1941,19 @@ if(proceedBtn){
     });
 
     message += `━━━━━━━━━━━━━━━\n`;
-    message += `🧾 *Items:* ${count}\n`;
-    message += `💰 *Grand Total:* ₹${total}\n`;
+    message += `🧾 Items: ${count}\n`;
+    message += `💰 Total: ₹${total}\n`;
     message += `━━━━━━━━━━━━━━━\n\n`;
 
+    message += `📍 Customer Details:\nName: _______\nAddress: _______`;
 
-    const phone = data.phone;
-
-    const url = `https://wa.me/91${phone}?text=${encodeURIComponent(message)}`;
+    const url = `https://wa.me/91${data.phone}?text=${encodeURIComponent(message)}`;
 
     window.open(url, "_blank");
 
   };
 
 }
-
 
 
 
