@@ -43,8 +43,8 @@ self.addEventListener("fetch", (event)=>{
         short_name: finalShort,
 
         start_url: `/${slug}`,
-        scope: `/${slug}`,   // 🔥 KEY FOR MULTI INSTALL
-
+        scope: `/`,   
+        
         display: "standalone",
         background_color: "#020617",
         theme_color: "#1e3a8a",
