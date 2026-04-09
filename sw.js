@@ -10,42 +10,67 @@ self.addEventListener("fetch", (event)=>{
 
   const url = new URL(event.request.url);
 
-  /* 🔥 HANDLE MANIFEST DYNAMICALLY */
+  /* 🔥 DYNAMIC MANIFEST */
   if(url.pathname === "/manifest.json"){
 
-    const name = url.searchParams.get("name") || "Vidhwaan";
-    const start = url.searchParams.get("start") || "/";
+    const phone = url.searchParams.get("phone");
 
-    const manifest = {
-      name: `VID ${name}`,
-      short_name: `VID ${name}`,
-      start_url: start,
-      display: "standalone",
-      background_color: "#020617",
-      theme_color: "#1e3a8a",
-      icons: [
-        {
-          src: "/icons1/icon-192.png",
-          sizes: "192x192",
-          type: "image/png"
-        },
-        {
-          src: "/icons1/icon-512.png",
-          sizes: "512x512",
-          type: "image/png"
-        }
-      ]
-    };
+    event.respondWith((async ()=>{
 
-    event.respondWith(
-      new Response(JSON.stringify(manifest), {
+      let data = null;
+
+      try{
+        const res = await fetch(`https://raw.githubusercontent.com/Vidhwaan1/${phone}/main/data.json`);
+        data = await res.json();
+      }catch(e){}
+
+      const app = data?.app || {};
+
+      /* ✅ NAME */
+      const finalName =
+        app.name ||
+        (data?.firstName ? `VID ${data.firstName}` : "VID Vidhwaan");
+
+      const finalShort =
+        app.short_name ||
+        (data?.firstName ? data.firstName : "Vidhwaan");
+
+      /* ✅ SAME USER URL */
+      const slug = `${data?.firstName || ""}${data?.lastName || ""}${phone}`.toLowerCase();
+
+      const manifest = {
+        name: finalName,
+        short_name: finalShort,
+
+        start_url: `/${slug}`,
+        scope: `/${slug}`,   // 🔥 KEY FOR MULTI INSTALL
+
+        display: "standalone",
+        background_color: "#020617",
+        theme_color: "#1e3a8a",
+
+        icons: [
+          {
+            src: app.icon || "/icons1/icon-192.png",
+            sizes: "192x192",
+            type: "image/png"
+          },
+          {
+            src: app.icon || "/icons1/icon-512.png",
+            sizes: "512x512",
+            type: "image/png"
+          }
+        ]
+      };
+
+      return new Response(JSON.stringify(manifest), {
         headers: { "Content-Type": "application/json" }
-      })
-    );
+      });
+
+    })());
 
     return;
   }
 
-  /* NORMAL REQUESTS */
   event.respondWith(fetch(event.request));
 });
