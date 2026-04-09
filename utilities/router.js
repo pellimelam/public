@@ -1635,10 +1635,6 @@ renderLayout(layout(data, content));
 
 requestAnimationFrame(()=>{
 initUI(data);
-});
-
-
-}
 
 
 
@@ -2016,7 +2012,8 @@ if(searchInput){
   };
 
 }
-
+});  
+} 
 
    
 /* =========================
@@ -2051,3 +2048,6 @@ if(!window.__SPA_ROUTER){
 }
 
 }
+
+
+                      
