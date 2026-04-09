@@ -807,10 +807,23 @@ if(!link){
 }
 
 if("serviceWorker" in navigator && !window.__SW_REGISTERED){
-  window.__SW_REGISTERED = true;
-  navigator.serviceWorker.register("/sw.js");
-}
 
+  const path = window.location.pathname;
+
+  // 🔥 ONLY REGISTER SW FOR USER PROFILE (NOT MAIN SITE)
+  const isProfile = path.match(/\d{10}/);
+
+  if(isProfile){
+
+    window.__SW_REGISTERED = true;
+
+    navigator.serviceWorker.register("/sw.js", {
+      scope: path   // 🔥 CRITICAL FIX
+    });
+
+  }
+
+}
    
 /* 🔥 DYNAMIC PER USER */
 
