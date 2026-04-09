@@ -14,6 +14,18 @@ document.body.innerHTML = "<div id='app'></div>";
 
 let path = window.location.pathname.toLowerCase();
 
+/* 🔥 HANDLE PWA APP MODE (SAFE) */
+if(path.startsWith("/app/")){
+  const parts = path.split("/");
+  const phone = parts[2];
+
+  // ✅ STRICT VALIDATION (10 digit only)
+  if(phone && /^\d{10}$/.test(phone)){
+    loadProfilePage(phone, "home");
+    return;
+  }
+}
+
 /* HANDLE 404 REDIRECT */
 const params = new URLSearchParams(window.location.search);
 const redirectedPath = params.get("path");
@@ -520,7 +532,8 @@ const isStandalone =
   window.matchMedia('(display-mode: standalone)').matches ||
   window.navigator.standalone === true;
 
-let isInstalled = localStorage.getItem("PWA_INSTALLED") === "1";
+const installKey = `PWA_INSTALLED_${data.phone}`;
+let isInstalled = localStorage.getItem(installKey) === "1";
 
 /* 🔥 ONLY RESET IF USER REALLY UNINSTALLED */
 if(!isStandalone && isInstalled){
@@ -778,7 +791,7 @@ if(!window.__PWA_INSTALLED_LISTENER){
   window.__PWA_INSTALLED_LISTENER = true;
 
   window.addEventListener("appinstalled", ()=>{
-    localStorage.setItem("PWA_INSTALLED", "1");
+    localStorage.setItem(`PWA_INSTALLED_${data.phone}`, "1");
   });
 }
 
@@ -813,7 +826,7 @@ if("serviceWorker" in navigator && !window.__SW_REGISTERED){
 
    
 /* 🔥 DYNAMIC PER USER */
-link.href = `/manifest.json?name=${encodeURIComponent(data.firstName)}&start=${encodeURIComponent(window.location.pathname)}`;
+link.href = `/manifest.json?phone=${data.phone}&t=${Date.now()}`;
 
 
 
