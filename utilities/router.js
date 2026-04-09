@@ -14,17 +14,6 @@ document.body.innerHTML = "<div id='app'></div>";
 
 let path = window.location.pathname.toLowerCase();
 
-/* 🔥 HANDLE PWA APP MODE (SAFE) */
-if(path.startsWith("/app/")){
-  const parts = path.split("/");
-  const phone = parts[2];
-
-  // ✅ STRICT VALIDATION (10 digit only)
-  if(phone && /^\d{10}$/.test(phone)){
-    loadProfilePage(phone, "home");
-    return;
-  }
-}
 
 /* HANDLE 404 REDIRECT */
 const params = new URLSearchParams(window.location.search);
@@ -57,6 +46,8 @@ break;
 }
 
 if(!phone) return;
+// 🔥 ENSURE CLEAN APP RENDER (CRITICAL)
+document.body.innerHTML = "<div id='app'></div>";
 
 // ✅ REMOVE MAIN SUPPORT BUTTON ON PROFILE PAGE
 const supportBtn = document.getElementById("supportBtn");
@@ -545,7 +536,7 @@ if(!isStandalone && isInstalled){
       window.navigator.standalone === true;
 
     if(!stillStandalone){
-      localStorage.removeItem("PWA_INSTALLED");
+      localStorage.removeItem(`PWA_INSTALLED_${data.phone}`);
     }
   }, 2000);
 }
