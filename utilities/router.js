@@ -8,8 +8,11 @@ document.getElementById("app").innerHTML = content;
 
 export function initRouter(){
 
-if(window.location.pathname.match(/\d{10}$/)){
-document.body.innerHTML = "<div id='app'></div>";
+/* 🔥 ENSURE APP MODE FOR ANY PROFILE ROUTE */
+if(window.location.pathname.match(/\d{10}/)){
+  if(!document.getElementById("app")){
+    document.body.innerHTML = "<div id='app'></div>";
+  }
 }
 
 let path = window.location.pathname.toLowerCase();
@@ -45,6 +48,10 @@ break;
 }
 
 if(!phone) return;
+/* 🔥 GUARANTEE APP CONTAINER (FINAL SAFETY) */
+if(!document.getElementById("app")){
+  document.body.innerHTML = "<div id='app'></div>";
+}
 
 // ✅ REMOVE MAIN SUPPORT BUTTON ON PROFILE PAGE
 const supportBtn = document.getElementById("supportBtn");
