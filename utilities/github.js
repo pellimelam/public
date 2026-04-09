@@ -74,21 +74,26 @@ const { phone, uid } = data;
 const repo = uid || phone; // fallback
 
 const fullData = {
-...data,
+  ...data,
 
-profileImage: data.profileImage || "",
-gallery:[],
-videos:[],
-about:"",
-social: [],
-slides: [],
+  /* 🔥 NEW APP CONFIG */
+  app: {
+    name: `${data.firstName} ${data.lastName}`,
+    short_name: data.firstName,
+    icon: data.profileImage || ""
+  },
 
-/* ✅ ADD THIS ONLY */
-business: {
+  profileImage: data.profileImage || "",
+  gallery: [],
+  videos: [],
+  about: "",
+  social: [],
   slides: [],
-  categories: []
-}
 
+  business: {
+    slides: [],
+    categories: []
+  }
 };
 
 /* SAVE DATA */
