@@ -398,3 +398,8 @@ BUSINESS PAGE (FINAL)
   border-color:#2563eb;
   box-shadow:0 0 10px rgba(37,99,235,0.5);
 }
+
+#itemsContainer{
+  transform: translateZ(0);
+  will-change: contents;
+}
