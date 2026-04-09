@@ -1,0 +1,14 @@
+🔥 FINAL SUMMARY
+Section	Aspect	Best Size
+Items	1:1	600 × 600
+Categories	1:1 (circle)	200 × 200
+Slider	16:9	1280 × 720
+⚠️ IMPORTANT (VERY IMPORTANT)
+
+Always use optimized URLs:
+
+?w=600&auto=format&fit=crop&q=80
+
+Example:
+
+https://images.unsplash.com/photo-xxx?w=600&auto=format&fit=crop&q=80
