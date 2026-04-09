@@ -1,73 +1,82 @@
-self.addEventListener("install", e => self.skipWaiting());
-
-self.addEventListener("activate", e => {
-  e.waitUntil(self.clients.claim());
+self.addEventListener("install", (event)=>{
+  self.skipWaiting();
 });
 
-self.addEventListener("fetch", (event) => {
+self.addEventListener("activate", (event)=>{
+  event.waitUntil(self.clients.claim());
+});
+
+self.addEventListener("fetch", (event)=>{
 
   const url = new URL(event.request.url);
 
-  if (url.pathname === "/manifest.json") {
-
-    const phone = url.searchParams.get("phone");
+  /* 🔥 HANDLE MANIFEST DYNAMICALLY */
+  if(url.pathname === "/manifest.json"){
 
     event.respondWith((async () => {
 
-      let data = null;
+      try{
 
-      try {
-        const res = await fetch(`https://raw.githubusercontent.com/Vidhwaan1/${phone}/main/data.json`);
-        data = await res.json();
-      } catch (e) {}
+        const path = url.searchParams.get("start") || "/";
+      
+        const phoneMatch = path.match(/(\d{10})/);
+        const phone = phoneMatch ? phoneMatch[1] : null;
 
-      const app = data?.app || {};
+        let data = null;
 
-      const slug = `${data?.firstName || ""}${data?.lastName || ""}${phone}`
-        .toLowerCase()
-        .replace(/\s+/g, "");
-
-      const manifest = {
-
-        /* 🔥 MAKE ID EXACTLY MATCH URL */
-        id: `/${slug}`,
-
-        name: app.name || `VID ${data?.firstName || "Vidhwaan"}`,
-        short_name: app.short_name || data?.firstName || "Vidhwaan",
-
-        /* 🔥 EXACT MATCH */
-        start_url: `/${slug}`,
-
-        /* 🔥 SAME AS START */
-        scope: `/${slug}`,
-
-        display: "standalone",
-
-        background_color: "#020617",
-        theme_color: "#1e3a8a",
-
-        icons: [
-          {
-            src: app.icon || "/icons1/icon-192.png",
-            sizes: "192x192",
-            type: "image/png"
-          },
-          {
-            src: app.icon || "/icons1/icon-512.png",
-            sizes: "512x512",
-            type: "image/png"
+        if(phone){
+          const res = await fetch(`https://raw.githubusercontent.com/Vidhwaan1/${phone}/main/data.json`);
+          if(res.ok){
+            data = await res.json();
           }
-        ]
-      };
+        }
 
-      return new Response(JSON.stringify(manifest), {
-        headers: { "Content-Type": "application/json" }
-      });
+        const appName = data?.app?.name || "Vidhwaan";
+        const shortName = data?.app?.short_name || appName;
+
+        const icon = data?.app?.icon || "/icons1/icon-192.png";
+
+        const manifest = {
+          name: appName,
+          short_name: shortName,
+
+          start_url: path + "?source=pwa",
+
+          scope: path,   // 🔥 CRITICAL (multi-app support)
+
+          display: "standalone",
+
+          background_color: "#020617",
+          theme_color: "#1e3a8a",
+
+          icons: [
+            {
+              src: icon,
+              sizes: "192x192",
+              type: "image/png"
+            },
+            {
+              src: icon,
+              sizes: "512x512",
+              type: "image/png"
+            }
+          ]
+        };
+
+        return new Response(JSON.stringify(manifest), {
+          headers: { "Content-Type": "application/json" }
+        });
+
+      }catch(e){
+
+        return fetch("/manifest.json"); // fallback
+      }
 
     })());
 
     return;
   }
 
+  /* NORMAL REQUESTS */
   event.respondWith(fetch(event.request));
 });
