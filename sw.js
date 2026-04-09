@@ -32,7 +32,7 @@ self.addEventListener("fetch", (event) => {
         short_name: app.short_name || data?.firstName || "Vidhwaan",
 
         start_url: `/${slug}`,   // ✅ EXACT ENTRY
-        scope: `/${slug}`,       // ✅ STRICT ISOLATION
+        scope: `/`,       // ✅ STRICT ISOLATION
 
         display: "standalone",
         display_override: ["standalone"],
