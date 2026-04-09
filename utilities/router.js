@@ -2047,7 +2047,4 @@ if(!window.__SPA_ROUTER){
 
 }
 
-}
-
-
-                      
+                  
