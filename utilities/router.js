@@ -244,6 +244,7 @@ return `
 <a href="/${geoPath}">Home</a>
 <a href="/${geoPath}/gallery">Gallery</a>
 <a href="/${geoPath}/videos">Videos</a>
+<a href="/${geoPath}/business">Business</a>
 <a href="/${geoPath}/about">About</a>
 </div>
 `;
@@ -1671,24 +1672,31 @@ cats.forEach((el,i)=>{
   };
 });
 
-/* DEFAULT SELECT */
-/* DEFAULT SELECT (FIXED - NO BLANK LOAD) */
 if(cats.length){
 
   window.__SELECTED_CATEGORY = 0;
 
-  // render directly (no click dependency)
-  renderItems(0);
+  // STEP 1: render empty container first
+  const container = document.getElementById("itemsContainer");
+  if(container){
+    container.innerHTML = `<div style="height:200px"></div>`;
+  }
 
-  // set active UI AFTER paint
+  // STEP 2: allow browser to paint UI first
   requestAnimationFrame(()=>{
-    cats.forEach(c=>{
-      c.style.opacity = "0.6";
-      c.classList.remove("active");
-    });
+    requestAnimationFrame(()=>{
 
-    cats[0].style.opacity = "1";
-    cats[0].classList.add("active");
+      renderItems(0);
+
+      cats.forEach(c=>{
+        c.style.opacity = "0.6";
+        c.classList.remove("active");
+      });
+
+      cats[0].style.opacity = "1";
+      cats[0].classList.add("active");
+
+    });
   });
 }
 
@@ -1729,7 +1737,9 @@ function renderItems(catIndex){
   const cat = finalCats[catIndex] || finalCats[0];
   const items = cat.items || [];
 
-  container.innerHTML = `
+  requestAnimationFrame(()=>{
+    container.innerHTML = `...`;
+  });
   <div class="grid">
 
   ${items.map((item,i)=>{
@@ -1741,11 +1751,16 @@ function renderItems(catIndex){
 
     <div class="card" style="padding:10px;">
 
-      <div style="aspect-ratio:1/1;border-radius:10px;overflow:hidden;background:rgba(255,255,255,0.05);">
+      <div style="
+        aspect-ratio:1/1;
+        border-radius:10px;
+        overflow:hidden;
+        background:#0f172a;
+      ">
 
         ${
           item.img
-          ? `<img src="${item.img}" style="width:100%;height:100%;object-fit:cover;">`
+          ? `<img src="${item.img}" loading="lazy" style="width:100%;height:100%;object-fit:cover;">`
           : `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#64748b;">No Image</div>`
         }
 
