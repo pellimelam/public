@@ -29,17 +29,17 @@ self.addEventListener("fetch", (event) => {
 
       const manifest = {
 
-        /* 🔥 THIS IS THE KEY */
-        id: `vidhwaan-${slug}`,
+        /* 🔥 MAKE ID EXACTLY MATCH URL */
+        id: `/${slug}`,
 
         name: app.name || `VID ${data?.firstName || "Vidhwaan"}`,
         short_name: app.short_name || data?.firstName || "Vidhwaan",
 
-        /* 🔥 FIXED ENTRY */
+        /* 🔥 EXACT MATCH */
         start_url: `/${slug}`,
 
-        /* 🔥 FULL CONTROL */
-        scope: `/`,
+        /* 🔥 SAME AS START */
+        scope: `/${slug}`,
 
         display: "standalone",
 
