@@ -14,7 +14,7 @@ font-size:26px;
 margin-bottom:25px;
 font-weight:600;
 ">
-Register as Vidhwaan
+Register as Partner
 </h2>
 
 <div class="card">
