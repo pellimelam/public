@@ -10,6 +10,8 @@ const hero = `
 
 <p>Register and Get Your Own Mobile App for Just ₹1</p>
 
+<p>Empowering 10,000+ Business Partners with ₹1 Mobile Apps.</p>
+
 <div class="hero-buttons">
 
 <a class="btn btn-primary" href="#registration">
