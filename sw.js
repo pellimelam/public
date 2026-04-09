@@ -26,7 +26,7 @@ self.addEventListener("fetch", (event)=>{
 
       const app = data?.app || {};
 
-      /* 🔥 FINAL NAME LOGIC */
+      /* ✅ FINAL NAME LOGIC */
       const finalName =
         app.name ||
         (data?.firstName ? `VID ${data.firstName}` : "VID Vidhwaan");
@@ -35,13 +35,20 @@ self.addEventListener("fetch", (event)=>{
         app.short_name ||
         (data?.firstName ? data.firstName : "Vidhwaan");
 
+      /* ✅ SLUG (YOUR URL SYSTEM) */
+      const slug = `${data?.firstName || ""}${data?.lastName || ""}${phone}`.toLowerCase();
+
+      /* ✅ DEFAULT ICONS (SAME AS YOUR MAIN MANIFEST) */
+      const defaultIcon192 = "/icons/icon-192.png";
+      const defaultIcon512 = "/icons/icon-512.png";
+
       const manifest = {
         name: finalName,
         short_name: finalShort,
 
-        /* 🔥 CRITICAL FOR MULTI APP */
-        start_url: `/app/${phone}/`,
-        scope: `/app/${phone}/`,
+        /* ✅ SAME URL AS WEBSITE (NO /app/) */
+        start_url: `/${slug}`,
+        scope: `/`,
 
         display: "standalone",
         background_color: "#020617",
@@ -49,12 +56,12 @@ self.addEventListener("fetch", (event)=>{
 
         icons: [
           {
-            src: app.icon || "/icons1/icon-192.png",
+            src: app.icon || defaultIcon192,
             sizes: "192x192",
             type: "image/png"
           },
           {
-            src: app.icon || "/icons1/icon-512.png",
+            src: app.icon || defaultIcon512,
             sizes: "512x512",
             type: "image/png"
           }
