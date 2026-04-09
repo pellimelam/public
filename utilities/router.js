@@ -1672,8 +1672,24 @@ cats.forEach((el,i)=>{
 });
 
 /* DEFAULT SELECT */
+/* DEFAULT SELECT (FIXED - NO BLANK LOAD) */
 if(cats.length){
-  cats[0].click();
+
+  window.__SELECTED_CATEGORY = 0;
+
+  // render directly (no click dependency)
+  renderItems(0);
+
+  // set active UI AFTER paint
+  requestAnimationFrame(()=>{
+    cats.forEach(c=>{
+      c.style.opacity = "0.6";
+      c.classList.remove("active");
+    });
+
+    cats[0].style.opacity = "1";
+    cats[0].classList.add("active");
+  });
 }
 
 
@@ -1891,9 +1907,6 @@ if(proceedBtn){
     message += `💰 *Grand Total:* ₹${total}\n`;
     message += `━━━━━━━━━━━━━━━\n\n`;
 
-    message += `📍 *Customer Details*\n`;
-    message += `Name: _______\n`;
-    message += `Address: _______\n`;
 
     const phone = data.phone;
 
