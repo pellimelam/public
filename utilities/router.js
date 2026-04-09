@@ -1382,10 +1382,12 @@ const routes = {
 navHome: base,
 navGallery: `${base}/gallery`,
 navVideos: `${base}/videos`,
+navBusiness: `${base}/business`,
 navAbout: `${base}/about`,
 mNavHome: base,
 mNavGallery: `${base}/gallery`,
 mNavVideos: `${base}/videos`,
+mNavBusiness: `${base}/business`,
 mNavAbout: `${base}/about`
 };
 
