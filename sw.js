@@ -10,7 +10,9 @@ self.addEventListener("fetch", (event)=>{
 
   const url = new URL(event.request.url);
 
-  /* 🔥 DYNAMIC MANIFEST */
+  /* =========================
+     DYNAMIC MANIFEST (PER USER)
+  ========================= */
   if(url.pathname === "/manifest.json"){
 
     const phone = url.searchParams.get("phone");
@@ -35,28 +37,39 @@ self.addEventListener("fetch", (event)=>{
         app.short_name ||
         (data?.firstName ? data.firstName : "Vidhwaan");
 
-      /* ✅ SAME USER URL */
+      /* ✅ UNIQUE SLUG */
       const slug = `${data?.firstName || ""}${data?.lastName || ""}${phone}`.toLowerCase();
 
+      /* ✅ UNIQUE START URL */
+      const startUrl = `/${slug}`;
+
+      /* ✅ DEFAULT ICONS */
+      const icon192 = app.icon || "/icons1/icon-192.png";
+      const icon512 = app.icon || "/icons1/icon-512.png";
+
       const manifest = {
+        id: startUrl,   // 🔥 VERY IMPORTANT (modern PWA identity)
+
         name: finalName,
         short_name: finalShort,
 
-        start_url: `/${slug}`,
-        scope: `/${slug}`,   
-        
+        start_url: startUrl,
+        scope: startUrl,   // 🔥 per-user isolation
+
         display: "standalone",
+        display_override: ["standalone", "minimal-ui"],
+
         background_color: "#020617",
         theme_color: "#1e3a8a",
 
         icons: [
           {
-            src: app.icon || "/icons1/icon-192.png",
+            src: icon192,
             sizes: "192x192",
             type: "image/png"
           },
           {
-            src: app.icon || "/icons1/icon-512.png",
+            src: icon512,
             sizes: "512x512",
             type: "image/png"
           }
@@ -72,18 +85,8 @@ self.addEventListener("fetch", (event)=>{
     return;
   }
 
-  /* 🔥 KEEP NAVIGATION INSIDE PWA */
-  if (event.request.mode === "navigate") {
-    event.respondWith(
-      fetch(event.request).then(res => {
-        return res;
-      }).catch(() => {
-        return fetch("/");
-      })
-    );
-    return;
-  }
-
-  /* NORMAL REQUESTS */
+  /* =========================
+     NORMAL REQUESTS (NO HACKS)
+  ========================= */
   event.respondWith(fetch(event.request));
 });
