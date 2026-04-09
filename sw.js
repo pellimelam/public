@@ -1,75 +1,53 @@
-self.addEventListener("install", (event)=>{
-  self.skipWaiting();
+self.addEventListener("install", e => self.skipWaiting());
+
+self.addEventListener("activate", e => {
+  e.waitUntil(self.clients.claim());
 });
 
-self.addEventListener("activate", (event)=>{
-  event.waitUntil(self.clients.claim());
-});
-
-self.addEventListener("fetch", (event)=>{
+self.addEventListener("fetch", (event) => {
 
   const url = new URL(event.request.url);
 
-  /* =========================
-     DYNAMIC MANIFEST (PER USER)
-  ========================= */
-  if(url.pathname === "/manifest.json"){
+  if (url.pathname === "/manifest.json") {
 
     const phone = url.searchParams.get("phone");
 
-    event.respondWith((async ()=>{
+    event.respondWith((async () => {
 
       let data = null;
 
-      try{
+      try {
         const res = await fetch(`https://raw.githubusercontent.com/Vidhwaan1/${phone}/main/data.json`);
         data = await res.json();
-      }catch(e){}
+      } catch (e) {}
 
       const app = data?.app || {};
 
-      /* ✅ NAME */
-      const finalName =
-        app.name ||
-        (data?.firstName ? `VID ${data.firstName}` : "VID Vidhwaan");
-
-      const finalShort =
-        app.short_name ||
-        (data?.firstName ? data.firstName : "Vidhwaan");
-
-      /* ✅ UNIQUE SLUG */
       const slug = `${data?.firstName || ""}${data?.lastName || ""}${phone}`.toLowerCase();
 
-      /* ✅ UNIQUE START URL */
-      const startUrl = `/${slug}`;
-
-      /* ✅ DEFAULT ICONS */
-      const icon192 = app.icon || "/icons1/icon-192.png";
-      const icon512 = app.icon || "/icons1/icon-512.png";
-
       const manifest = {
-        id: startUrl,   // 🔥 VERY IMPORTANT (modern PWA identity)
+        id: `/${slug}`,   // ✅ UNIQUE APP ID
 
-        name: finalName,
-        short_name: finalShort,
+        name: app.name || `VID ${data?.firstName || "Vidhwaan"}`,
+        short_name: app.short_name || data?.firstName || "Vidhwaan",
 
-        start_url: startUrl,
-        scope: startUrl,   // 🔥 per-user isolation
+        start_url: `/${slug}`,   // ✅ EXACT ENTRY
+        scope: `/${slug}`,       // ✅ STRICT ISOLATION
 
         display: "standalone",
-        display_override: ["standalone", "minimal-ui"],
+        display_override: ["standalone"],
 
         background_color: "#020617",
         theme_color: "#1e3a8a",
 
         icons: [
           {
-            src: icon192,
+            src: app.icon || "/icons1/icon-192.png",
             sizes: "192x192",
             type: "image/png"
           },
           {
-            src: icon512,
+            src: app.icon || "/icons1/icon-512.png",
             sizes: "512x512",
             type: "image/png"
           }
@@ -85,8 +63,5 @@ self.addEventListener("fetch", (event)=>{
     return;
   }
 
-  /* =========================
-     NORMAL REQUESTS (NO HACKS)
-  ========================= */
   event.respondWith(fetch(event.request));
 });
