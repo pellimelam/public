@@ -10,7 +10,10 @@ self.addEventListener("fetch", (event)=>{
 
   const url = new URL(event.request.url);
 
-  /* 🔥 HANDLE MANIFEST DYNAMICALLY */
+  /* =========================================
+     🔥 DYNAMIC MANIFEST (PER USER)
+  ========================================= */
+
   if(url.pathname === "/manifest.json"){
 
     event.respondWith((async () => {
@@ -18,7 +21,8 @@ self.addEventListener("fetch", (event)=>{
       try{
 
         const path = url.searchParams.get("start") || "/";
-      
+
+        /* ✅ EXTRACT PHONE */
         const phoneMatch = path.match(/(\d{10})/);
         const phone = phoneMatch ? phoneMatch[1] : null;
 
@@ -31,20 +35,22 @@ self.addEventListener("fetch", (event)=>{
           }
         }
 
+        /* ✅ APP CONFIG */
         const appName = data?.app?.name || "Vidhwaan";
         const shortName = data?.app?.short_name || appName;
 
         const icon = data?.app?.icon || "/icons1/icon-192.png";
 
+        /* ✅ FINAL MANIFEST */
         const manifest = {
           name: appName,
           short_name: shortName,
 
-          start_url: path + "?source=pwa",
-
-          scope: path,   // 🔥 CRITICAL (multi-app support)
+          start_url: path,              // 🔥 FIXED (no redirect bug)
+          scope: path,                 // 🔥 PER USER APP
 
           display: "standalone",
+          display_override: ["standalone", "minimal-ui"],
 
           background_color: "#020617",
           theme_color: "#1e3a8a",
@@ -69,7 +75,9 @@ self.addEventListener("fetch", (event)=>{
 
       }catch(e){
 
-        return fetch("/manifest.json"); // fallback
+        /* ✅ SAFE FALLBACK (OLD USERS SAFE) */
+        return fetch("/manifest.json");
+
       }
 
     })());
@@ -77,6 +85,26 @@ self.addEventListener("fetch", (event)=>{
     return;
   }
 
-  /* NORMAL REQUESTS */
+  /* =========================================
+     🔥 ISOLATION LOGIC (CRITICAL FIX)
+  ========================================= */
+
+  const scopePath = self.registration.scope.replace(self.location.origin, "");
+
+  // 🚫 BLOCK requests outside app scope
+  if(scopePath !== "/" && !url.pathname.startsWith(scopePath)){
+    return; // let browser handle normally
+  }
+
+  // 🚫 NEVER hijack root (main site)
+  if(url.pathname === "/"){
+    return;
+  }
+
+  /* =========================================
+     NORMAL REQUESTS
+  ========================================= */
+
   event.respondWith(fetch(event.request));
+
 });
