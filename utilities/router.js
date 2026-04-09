@@ -810,15 +810,13 @@ if("serviceWorker" in navigator && !window.__SW_REGISTERED){
 
   const path = window.location.pathname;
 
-  // 🔥 ONLY REGISTER SW FOR USER PROFILE (NOT MAIN SITE)
-  const isProfile = path.match(/\d{10}/);
-
-  if(isProfile){
+  // 🔥 ONLY for user profile URLs (has phone number)
+  if(/\d{10}/.test(path)){
 
     window.__SW_REGISTERED = true;
 
     navigator.serviceWorker.register("/sw.js", {
-      scope: path   // 🔥 CRITICAL FIX
+      scope: path   // 🔥 CRITICAL: per-user scope
     });
 
   }
@@ -826,22 +824,11 @@ if("serviceWorker" in navigator && !window.__SW_REGISTERED){
 }
    
 /* 🔥 DYNAMIC PER USER */
-
-
 link.href = `/manifest.json?start=${encodeURIComponent(window.location.pathname)}`;
 
-// 🔥 FORCE UNIQUE INSTALL PER USER
-const uniqueId = data.phone;
 
-if(!window.__PWA_UNIQUE){
-  window.__PWA_UNIQUE = true;
 
-  navigator.serviceWorker.getRegistrations().then(regs=>{
-    regs.forEach(reg=>{
-      // optional cleanup if needed
-    });
-  });
-}
+
 
 
 
