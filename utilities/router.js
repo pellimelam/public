@@ -1412,14 +1412,15 @@ const searchHTML = `
     placeholder="Search items..."
     style="
       width:100%;
-      height:42px;
-      border-radius:10px;
-      border:1px solid rgba(148,163,184,0.3);
-      background:#020617;
+      height:44px;
+      border-radius:12px;
+      border:1px solid rgba(148,163,184,0.2);
+      background:rgba(255,255,255,0.05);
       color:white;
-      padding:0 12px;
+      padding:0 14px;
       outline:none;
       font-size:14px;
+      box-sizing:border-box;
     "
   />
 
