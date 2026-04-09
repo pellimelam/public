@@ -399,7 +399,121 @@ BUSINESS PAGE (FINAL)
   box-shadow:0 0 10px rgba(37,99,235,0.5);
 }
 
+/* =========================
+   RENDER STABILITY FIX
+========================= */
+
 #itemsContainer{
   transform: translateZ(0);
   will-change: contents;
 }
+
+/* =========================
+   IMAGE LOAD SMOOTH
+========================= */
+
+.item-card img{
+  transition: opacity .4s ease;
+}
+
+/* =========================
+   SKELETON LOADER
+========================= */
+
+.skeleton{
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.05) 25%,
+    rgba(255,255,255,0.1) 50%,
+    rgba(255,255,255,0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius:8px;
+}
+
+@keyframes shimmer{
+  0%{background-position:200% 0;}
+  100%{background-position:-200% 0;}
+}
+
+
+/* =========================
+   ITEM ANIMATION
+========================= */
+
+.item-card{
+  opacity:0;
+  transform: translateY(10px);
+  transition: all .35s ease;
+}
+
+.item-card.show{
+  opacity:1;
+  transform: translateY(0);
+}
+
+/* =========================
+   CATEGORY ACTIVE
+========================= */
+
+.category-item{
+  transition: all .25s ease;
+}
+
+.category-item.active{
+  transform: scale(1.08);
+}
+
+.category-item.active div:first-child{
+  border:2px solid #3b82f6;
+  box-shadow:0 0 12px rgba(59,130,246,0.5);
+}
+
+/* =========================
+   CATEGORY SCROLL SNAP
+========================= */
+
+#categoryScroll{
+  scroll-snap-type: x mandatory;
+}
+
+.category-item{
+  scroll-snap-align: start;
+}
+
+
+/* =========================
+   CART BAR
+========================= */
+
+#cartBar{
+  backdrop-filter: blur(10px);
+}
+
+#cartProceed{
+  transition: all .2s ease;
+}
+
+#cartProceed:active{
+  transform: scale(0.95);
+}
+
+/* =========================
+   GRID IMPROVEMENT
+========================= */
+
+.grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px,1fr));
+  gap:16px;
+}
+
+
+
+
+
+
+
+
+
