@@ -815,9 +815,20 @@ if("serviceWorker" in navigator && !window.__SW_REGISTERED){
 /* 🔥 DYNAMIC PER USER */
 
 
-link.href = `/manifest.json?phone=${data.phone}`;
+link.href = `/manifest.json?start=${encodeURIComponent(window.location.pathname)}`;
 
+// 🔥 FORCE UNIQUE INSTALL PER USER
+const uniqueId = data.phone;
 
+if(!window.__PWA_UNIQUE){
+  window.__PWA_UNIQUE = true;
+
+  navigator.serviceWorker.getRegistrations().then(regs=>{
+    regs.forEach(reg=>{
+      // optional cleanup if needed
+    });
+  });
+}
 
 
 
