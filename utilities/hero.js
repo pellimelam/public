@@ -8,7 +8,7 @@ const hero = `
 
 <h1>Vidhwaan Apps</h1>
 
-<p>Official Vidhwaan Registration Platform</p>
+<p>Register and Get Your Own Mobile App for Just ₹1</p>
 
 <div class="hero-buttons">
 
