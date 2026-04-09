@@ -10,9 +10,9 @@ self.addEventListener("fetch", (event)=>{
 
   const url = new URL(event.request.url);
 
-  /* ===============================
-     🔥 DYNAMIC MANIFEST (PER USER)
-  =============================== */
+  /* =========================================
+     🔥 DYNAMIC MANIFEST (SAFE UPGRADE)
+  ========================================= */
 
   if(url.pathname === "/manifest.json"){
 
@@ -39,18 +39,21 @@ self.addEventListener("fetch", (event)=>{
           }catch(e){}
         }
 
-        /* ✅ SAFE FALLBACKS (OLD USERS SAFE) */
+        /* ✅ SAFE FALLBACKS (NO BREAK) */
         const appName = data?.app?.name || "Vidhwaan";
         const shortName = data?.app?.short_name || appName;
         const icon = data?.app?.icon || "/icons1/icon-192.png";
 
-        /* ✅ FINAL MANIFEST */
+        /* 🔥 CRITICAL FIXES */
+        const scope = start.endsWith("/") ? start : start + "/";
+
         const manifest = {
+          id: start,                 // 🔥 ensures unique app per user
           name: appName,
           short_name: shortName,
 
-          start_url: start,   // 🔥 opens correct user
-          scope: start,       // 🔥 per-user app (multi install)
+          start_url: start,          // 🔥 opens correct user
+          scope: scope,              // 🔥 prevents root fallback
 
           display: "standalone",
 
@@ -77,7 +80,7 @@ self.addEventListener("fetch", (event)=>{
 
       }catch(e){
 
-        /* 🔁 fallback to static manifest (no break) */
+        /* 🔁 FALLBACK TO ORIGINAL STATIC MANIFEST */
         return fetch("/manifest.json");
       }
 
@@ -86,9 +89,9 @@ self.addEventListener("fetch", (event)=>{
     return;
   }
 
-  /* ===============================
-     🌐 NORMAL REQUESTS (NO HIJACK)
-  =============================== */
+  /* =========================================
+     🌐 ORIGINAL BEHAVIOR (UNCHANGED)
+  ========================================= */
 
   event.respondWith(fetch(event.request));
 
