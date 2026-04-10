@@ -808,13 +808,14 @@ if(!link){
 
 if("serviceWorker" in navigator && !window.__SW_REGISTERED){
   window.__SW_REGISTERED = true;
-  navigator.serviceWorker.register("/sw.js");
+  navigator.serviceWorker.register("/sw.js", {
+    scope: window.location.pathname
+  });
 }
 
    
 /* 🔥 DYNAMIC PER USER */
-link.href = `/manifest.json?name=${encodeURIComponent(data.firstName)}&start=${encodeURIComponent(window.location.pathname)}`;
-
+link.href = `/manifest.json?start=${encodeURIComponent(window.location.pathname)}`;
 
 
 
