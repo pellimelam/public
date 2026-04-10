@@ -807,24 +807,13 @@ if(!link){
 }
 
 if("serviceWorker" in navigator && !window.__SW_REGISTERED){
-
-  const path = window.location.pathname;
-
-  // 🔥 ONLY for user profile URLs (has phone number)
-  if(/\d{10}/.test(path)){
-
-    window.__SW_REGISTERED = true;
-
-    navigator.serviceWorker.register("/sw.js", {
-      scope: path   // 🔥 CRITICAL: per-user scope
-    });
-
-  }
-
+  window.__SW_REGISTERED = true;
+  navigator.serviceWorker.register("/sw.js");
 }
+
    
 /* 🔥 DYNAMIC PER USER */
-link.href = `/manifest.json?start=${encodeURIComponent(window.location.pathname)}`;
+link.href = `/manifest.json?name=${encodeURIComponent(data.firstName)}&start=${encodeURIComponent(window.location.pathname)}`;
 
 
 
