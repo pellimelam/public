@@ -40,8 +40,8 @@ self.addEventListener("fetch", (event)=>{
         }
 
         /* ✅ SAFE FALLBACK */
-        const appName = data?.app?.name || "Vidhwaan";
-        const shortName = data?.app?.short_name || appName;
+        const appName = data?.app?.name || data?.firstName || "Vidhwaan";
+        const shortName = data?.app?.short_name || data?.firstName || appName;
         const icon = data?.app?.icon || "/icons1/icon-192.png";
 
         /* 🔥 CRITICAL FIX */
