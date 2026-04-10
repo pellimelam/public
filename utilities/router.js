@@ -28,7 +28,18 @@ window.history.replaceState({}, "", path);
 }
 
 /* IGNORE ROOT */
-if(path === "/" || path === "/index.html") return;
+if(path === "/" || path === "/index.html"){
+
+  // 🔥 FIX: redirect to correct user inside app
+  const lastPath = localStorage.getItem("LAST_PROFILE_PATH");
+
+  if(lastPath){
+    history.replaceState({}, "", lastPath);
+    initRouter();
+  }
+
+  return;
+}
 
 /* SPLIT */
 const parts = path.split("/").filter(Boolean);
@@ -450,6 +461,7 @@ function initSlider(slider){
 ========================= */
 
 function renderHome(data){
+localStorage.setItem("LAST_PROFILE_PATH", window.location.pathname);
 
 
 
