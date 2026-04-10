@@ -17,6 +17,7 @@ font-weight:600;
 Register as Success Partner
 </h2>
 
+
 <div class="card">
 
 <div class="form-group">
