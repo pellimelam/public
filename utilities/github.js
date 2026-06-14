@@ -94,10 +94,6 @@ business: {
 /* SAVE DATA */
 await pushFile(repo, "data.json", JSON.stringify(fullData, null, 2));
 
-/* GENERATE PAGES */
-await pushFile(repo, "index.html", generateHome(fullData));
-await pushFile(repo, "gallery.html", generateGallery(fullData));
-await pushFile(repo, "videos.html", generateVideos(fullData));
-await pushFile(repo, "about.html", generateAbout(fullData));
+
 
 }
