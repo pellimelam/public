@@ -15,6 +15,9 @@
    
 <link rel="icon" href="/favicon.ico">
 
+<!-- Razorpay Checkout -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
 <!-- CSS -->
 <link rel="stylesheet" href="./css/design-system.css">
 <link rel="stylesheet" href="./css/main.css">
@@ -127,7 +130,59 @@ resultEl.innerHTML = "Opening payment...";
 
 let paymentDone = false;
 
-const rzp = new Razorpay({
+/* =========================
+   MOBILE-SAFE RAZORPAY LOAD
+   ========================= */
+
+async function ensureRazorpayLoaded() {
+
+  if (window.Razorpay) {
+    return true;
+  }
+
+  return new Promise((resolve, reject) => {
+
+    const script = document.createElement("script");
+
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+
+    script.onload = () => {
+      if (window.Razorpay) {
+        resolve(true);
+      } else {
+        reject(new Error("Razorpay did not initialize"));
+      }
+    };
+
+    script.onerror = () => {
+      reject(new Error("Razorpay checkout failed to load"));
+    };
+
+    document.head.appendChild(script);
+
+  });
+
+}
+
+try {
+
+  await ensureRazorpayLoaded();
+
+} catch (error) {
+
+  console.error("Razorpay loading error:", error);
+
+  resultEl.innerHTML = `
+    <div style="color:#ef4444;margin-top:10px;">
+      ❌ Payment service could not load.<br>
+      Please check your internet connection and try again.
+    </div>
+  `;
+
+  return;
+}
+
+const rzp = new window.Razorpay({
   key: "rzp_live_SO4F7YCOOnRVRZ",
   amount: 100,
   currency: "INR",
@@ -251,17 +306,30 @@ const rzp = new Razorpay({
     alert("Profile created 🚀");
   },
 
-  modal:{
+  modal: {
+
+    escape: true,
+
+    handleback: true,
+
+    backdropclose: false,
+
+    animation: false,
+
     ondismiss: function(){
+
       paymentDone = false;
 
       resultEl.innerHTML = `
-      <div style="color:#94a3b8;margin-top:10px;">
-      Payment cancelled. Please try again.
-      </div>
+        <div style="color:#94a3b8;margin-top:10px;">
+          Payment cancelled. Please try again.
+        </div>
       `;
+
     }
+
   }
+
 });
 
 rzp.open();
@@ -290,7 +358,7 @@ card.style.setProperty("--y", y + "px");
 
 </script>
 
-<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
   
 </body>
 </html>
